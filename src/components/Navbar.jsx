@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 const Navbar = () => {
   const navLinkClass=({isActive})=>
-    `hover:text-white ${isActive ? "text-pink": "text-blue"}` 
+    `hover:text-white ${isActive ? "text-pink-600": "text-black"}` 
   return (
     <nav className='flex justify-between items-center py-10 px-12 bg-gray-400'>
       <div className='flex justify-between items-center gap-3'>
@@ -16,9 +16,7 @@ const Navbar = () => {
         <li><NavLink to='/about' className={navLinkClass}>About</NavLink></li>
         <li><NavLink to='/careers' className={navLinkClass}>Careers</NavLink></li>
         <li><NavLink to='/contact' className={navLinkClass}>Contact</NavLink></li>
-      </ul>
-
-      
+      </ul> 
     </nav>
   )
 }

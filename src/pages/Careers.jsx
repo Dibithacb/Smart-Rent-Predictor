@@ -1,7 +1,11 @@
 import React from 'react'
 
-export const Careers = () => {
+const Careers = () => {
   return (
-    <div>Careers</div>
+    <div>
+      Careers
+    </div>
   )
 }
+
+export default Careers
