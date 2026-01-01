@@ -1,8 +1,11 @@
 import React from 'react'
+import Properties from '../components/Properties'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div>
+      <Properties/>
+    </div>
   )
 }
 

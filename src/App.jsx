@@ -6,6 +6,8 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Careers from './pages/Careers'
 import Contact from './pages/Contact'
+import ProperyDetails from './components/ProperyDetails'
+
 
 
 
@@ -18,6 +20,7 @@ const App = () => {
             <Route path='/about' element={<About/>}></Route>
             <Route path='/careers' element={<Careers/>}></Route>
             <Route path='/contact' element={<Contact/>}></Route>
+            <Route path='/properties/:id' element={<ProperyDetails/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

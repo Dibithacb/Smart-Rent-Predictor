@@ -371,7 +371,7 @@ export const productData=[
       "title": "Riverside Apartment with View",
       "price": 1700,
       "images": [
-  "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
+  "https://images.unsplash.com/photo-1605352081508-2e09927ecfe3",
   "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
   "https://images.unsplash.com/photo-1599423300746-b62533397364",
   "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",

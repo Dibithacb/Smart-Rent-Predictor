@@ -4,7 +4,7 @@ import Property from './Property'
 
 const Properties = () => {
   return (
-    <div>
+    <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-4'>
       {productData.map((p)=>(
         <Property key={p.id}
         id={p.id}
