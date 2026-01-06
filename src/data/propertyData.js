@@ -1,4 +1,4 @@
-export const productData=[
+export const propertyData=[
     {
       "id": "prop_1001",
       "title": "Luxury Downtown Apartment",
