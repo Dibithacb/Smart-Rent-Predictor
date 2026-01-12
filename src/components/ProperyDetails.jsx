@@ -169,7 +169,7 @@ const PropertyDetails = () => {
                 className="rounded-xl"
               >
                 {property.images.map((img, index) => (
-                  <div key={index} className="h-[500px]">
+                  <div key={index} className="h-125">
                     <img
                       src={img}
                       alt={`${property.title} ${index + 1}`}
