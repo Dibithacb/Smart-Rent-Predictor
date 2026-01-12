@@ -1,532 +1,506 @@
 export const propertyData=[
-    {
-      "id": "prop_1001",
-      "title": "Luxury Downtown Apartment",
-      "price": 2200,
-      "images": [
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
-        ],
-      "predicted_rent": 2250,
-      "bedrooms": 2,
-      "bathrooms": 2,
-      "area_sqft": 1200,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2675,
-        "longitude": -97.7429,
-        "neighborhood": "Downtown"
-      },
-      "amenities": ["Gym", "Parking", "Pool", "Balcony"],
-      "rating": 4.6,
-      "popularity": 410
+   // Property 1 - Dubai Marina Luxury
+  {
+    id: 'DXB-001',
+    title: 'Marina View Luxury Apartment',
+    description: 'Stunning 2 bedroom apartment with panoramic views of Dubai Marina and Arabian Gulf. Fully furnished with premium finishes.',
+    price: 145000,
+    predictedPrice: 150000,
+    priceTrend: 'up',
+    type: 'apartment',
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 1650,
+    location: {
+      lat: 25.0809,
+      lng: 55.1445,
+      area: 'Dubai Marina',
+      emirate: 'Dubai'
     },
-    {
-      "id": "prop_1002",
-      "title": "Cozy Studio Near University",
-      "price": 1200,
-      "images": [
-        "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-        "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11"
-        ],
-      "predicted_rent": 1180,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 550,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2852,
-        "longitude": -97.7331,
-        "neighborhood": "University Area"
-      },
-      "amenities": ["WiFi", "Laundry"],
-      "rating": 4.1,
-      "popularity": 255
-    },
-    {
-      "id": "prop_1003",
-      "title": "Family Home with Backyard",
-      "price": 2600,
-      "images": [
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-    "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-    "https://images.unsplash.com/photo-1599423300746-b62533397364"
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony', 'concierge'],
+    images: [
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1549451371-64aa98a6f660?w=1200&h=800&fit=crop'
     ],
-      "predicted_rent": 2550,
-      "bedrooms": 3,
-      "bathrooms": 2,
-      "area_sqft": 1800,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3011,
-        "longitude": -97.7205,
-        "neighborhood": "North Austin"
-      },
-      "amenities": ["Garage", "Backyard", "Pet Friendly"],
-      "rating": 4.5,
-      "popularity": 330
-    },
-    {
-      "id": "prop_1004",
-      "title": "Modern Condo with City View",
-      "price": 2000,
-      "images": [
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
-        ],
-
-      "predicted_rent": 2050,
-      "bedrooms": 2,
-      "bathrooms": 1,
-      "area_sqft": 950,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2609,
-        "longitude": -97.7502,
-        "neighborhood": "South Congress"
-      },
-      "amenities": ["Elevator", "Balcony", "Gym"],
-      "rating": 4.3,
-      "popularity": 290
-    },
-    {
-      "id": "prop_1005",
-      "title": "Affordable Shared Apartment",
-      "price": 900,
-      "images": [
-        "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-        ],
-      "predicted_rent": 950,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 450,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2431,
-        "longitude": -97.7644,
-        "neighborhood": "Riverside"
-      },
-      "amenities": ["WiFi", "Shared Kitchen"],
-      "rating": 3.9,
-      "popularity": 190
-    },
-
-    {
-      "id": "prop_1006",
-      "title": "Spacious Suburban Townhouse",
-      "price": 2400,
-      "images": [
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-        "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-        "https://images.unsplash.com/photo-1599423300746-b62533397364",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
-        ],
-      "predicted_rent": 2380,
-      "bedrooms": 3,
-      "bathrooms": 3,
-      "area_sqft": 1700,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3302,
-        "longitude": -97.7041,
-        "neighborhood": "Cedar Park"
-      },
-      "amenities": ["Garage", "Pool", "Pet Friendly"],
-      "rating": 4.4,
-      "popularity": 310
-    },
-    {
-      "id": "prop_1007",
-      "title": "Minimalist Studio Flat",
-      "price": 1100,
-      "images": [
-        "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-        "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11"
-        ],
-      "predicted_rent": 1080,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 500,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2718,
-        "longitude": -97.7510,
-        "neighborhood": "West End"
-      },
-      "amenities": ["Laundry", "WiFi"],
-      "rating": 4.0,
-      "popularity": 210
-    },
-    {
-      "id": "prop_1008",
-      "title": "High-Rise Apartment",
-      "price": 2800,
-      "images": [
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-        "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-        "https://images.unsplash.com/photo-1599423300746-b62533397364"
-        ],
-      "predicted_rent": 2750,
-      "bedrooms": 2,
-      "bathrooms": 2,
-      "area_sqft": 1300,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2689,
-        "longitude": -97.7412,
-        "neighborhood": "Downtown"
-      },
-      "amenities": ["Gym", "Pool", "Concierge"],
-      "rating": 4.8,
-      "popularity": 520
-    },
-    {
-      "id": "prop_1009",
-      "title": "Quiet Neighborhood Apartment",
-      "price": 1500,
-      "images": [
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-        "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-        "https://images.unsplash.com/photo-1598928506311-c55ded91a20c"
-        ],
-      "predicted_rent": 1480,
-      "bedrooms": 2,
-      "bathrooms": 1,
-      "area_sqft": 800,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2924,
-        "longitude": -97.7063,
-        "neighborhood": "Mueller"
-      },
-      "amenities": ["Parking", "Pet Friendly"],
-      "rating": 4.2,
-      "popularity": 260
-    },
-    {
-      "id": "prop_1010",
-      "title": "Luxury Villa with Pool",
-      "price": 4200,
-      "images": [
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-        "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6"
-        ],
-      "predicted_rent": 4100,
-      "bedrooms": 4,
-      "bathrooms": 4,
-      "area_sqft": 3200,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3455,
-        "longitude": -97.7892,
-        "neighborhood": "Lakeway"
-      },
-      "amenities": ["Private Pool", "Garage", "Garden"],
-      "rating": 4.9,
-      "popularity": 610
-    },
-
-    {
-      "id": "prop_1011",
-      "title": "Modern Loft Apartment",
-      "price": 1900,
-      "images": [
-        "https://images.unsplash.com/photo-1599423300746-b62533397364",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-        "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-        ],
-      "predicted_rent": 1950,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 900,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2741,
-        "longitude": -97.7354,
-        "neighborhood": "East Austin"
-      },
-      "amenities": ["Balcony", "Gym"],
-      "rating": 4.4,
-      "popularity": 340
-    },
-    {
-      "id": "prop_1012",
-      "title": "Student-Friendly Apartment",
-      "price": 1300,
-      "images": [
-    "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-    "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-    "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c"
-    ],
-      "predicted_rent": 1350,
-      "bedrooms": 2,
-      "bathrooms": 1,
-      "area_sqft": 700,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2873,
-        "longitude": -97.7422,
-        "neighborhood": "Hyde Park"
-      },
-      "amenities": ["WiFi", "Laundry", "Bike Storage"],
-      "rating": 4.0,
-      "popularity": 280
-    },
-    {
-      "id": "prop_1013",
-      "title": "Eco-Friendly Smart Home",
-      "price": 3000,
-    "images": [
-    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-    "https://images.unsplash.com/photo-1599423300746-b62533397364",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-    "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-    "https://images.unsplash.com/photo-1554995207-c18c203602cb"
-    ],
-      "predicted_rent": 2950,
-      "bedrooms": 3,
-      "bathrooms": 2,
-      "area_sqft": 2000,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3151,
-        "longitude": -97.7688,
-        "neighborhood": "Allandale"
-      },
-      "amenities": ["Solar Panels", "Smart Thermostat"],
-      "rating": 4.7,
-      "popularity": 390
-    },
-    {
-      "id": "prop_1014",
-      "title": "Compact Budget Studio",
-      "price": 850,
-      "images": [
-    "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-    "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c"
-    ],
-      "predicted_rent": 900,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 400,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2487,
-        "longitude": -97.7783,
-        "neighborhood": "St. Edwards"
-      },
-      "amenities": ["WiFi"],
-      "rating": 3.8,
-      "popularity": 175
-    },
-    {
-      "id": "prop_1015",
-      "title": "Riverside Apartment with View",
-      "price": 1700,
-      "images": [
-  "https://images.unsplash.com/photo-1605352081508-2e09927ecfe3",
-  "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-  "https://images.unsplash.com/photo-1599423300746-b62533397364",
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-  "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
-],
-      "predicted_rent": 1680,
-      "bedrooms": 2,
-      "bathrooms": 2,
-      "area_sqft": 1000,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2588,
-        "longitude": -97.7199,
-        "neighborhood": "Riverside"
-      },
-      "amenities": ["Balcony", "Parking"],
-      "rating": 4.3,
-      "popularity": 295
-    },
-
-    {
-      "id": "prop_1016",
-      "title": "Pet-Friendly Duplex",
-      "price": 2100,
-      "images": [
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-  "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-  "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-  "https://images.unsplash.com/photo-1599423300746-b62533397364"
-],
-
-      "predicted_rent": 2080,
-      "bedrooms": 3,
-      "bathrooms": 2,
-      "area_sqft": 1500,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3076,
-        "longitude": -97.7294,
-        "neighborhood": "Brentwood"
-      },
-      "amenities": ["Backyard", "Pet Friendly"],
-      "rating": 4.4,
-      "popularity": 305
-    },
-    {
-      "id": "prop_1017",
-      "title": "Urban Micro Apartment",
-      "price": 950,
-      "images": [
-    "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-    "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-    "https://images.unsplash.com/photo-1586105251261-72a756497a11",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-    ],
-      "predicted_rent": 980,
-      "bedrooms": 1,
-      "bathrooms": 1,
-      "area_sqft": 380,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2701,
-        "longitude": -97.7558,
-        "neighborhood": "Clarksville"
-      },
-      "amenities": ["WiFi", "Security"],
-      "rating": 3.9,
-      "popularity": 200
-    },
-    {
-      "id": "prop_1018",
-      "title": "Executive Penthouse",
-      "price": 5200,
-      "images": [
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-    "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-    "https://images.unsplash.com/photo-1599423300746-b62533397364",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
-    ],
-
-      "predicted_rent": 5100,
-      "bedrooms": 3,
-      "bathrooms": 3,
-      "area_sqft": 2800,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2680,
-        "longitude": -97.7400,
-        "neighborhood": "Downtown"
-      },
-      "amenities": ["Private Elevator", "Terrace", "Gym"],
-      "rating": 5.0,
-      "popularity": 740
-    },
-    {
-      "id": "prop_1019",
-      "title": "Suburban Budget Apartment",
-      "price": 1400,
-      "images": [
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-        "https://images.unsplash.com/photo-1600047509782-20f3da0f7f3c",
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-        "https://images.unsplash.com/photo-1599423300746-b62533397364",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
-        ],
-
-      "predicted_rent": 1420,
-      "bedrooms": 2,
-      "bathrooms": 1,
-      "area_sqft": 780,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.3364,
-        "longitude": -97.6793,
-        "neighborhood": "Pflugerville"
-      },
-      "amenities": ["Parking", "Laundry"],
-      "rating": 4.1,
-      "popularity": 230
-    },
-    {
-      "id": "prop_1020",
-      "title": "Stylish Townhome",
-      "price": 2300,
-      "images": [
-    "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-    "https://images.unsplash.com/photo-1554995207-c18c203602cb",
-    "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-    "https://images.unsplash.com/photo-1598928506311-c55ded91a20c",
-    "https://images.unsplash.com/photo-1586105251261-72a756497a11"
-    ],
-
-      "predicted_rent": 2280,
-      "bedrooms": 3,
-      "bathrooms": 2,
-      "area_sqft": 1600,
-      "location": {
-        "city": "Austin",
-        "state": "TX",
-        "latitude": 30.2899,
-        "longitude": -97.7653,
-        "neighborhood": "Rosedale"
-      },
-      "amenities": ["Garage", "Balcony"],
-      "rating": 4.5,
-      "popularity": 360
+    rating: 4.7,
+    reviews: 128,
+    features: {
+      furnished: true,
+      view: 'sea',
+      floor: 24
     }
-
+  },
+  
+  // Property 2 - Arabian Ranches Villa
+  {
+    id: 'DXB-002',
+    title: 'Modern Villa at Arabian Ranches',
+    description: 'Spacious 4 bedroom villa with private pool and garden in gated community. Perfect for families.',
+    price: 320000,
+    predictedPrice: 315000,
+    priceTrend: 'stable',
+    type: 'villa',
+    bedrooms: 4,
+    bathrooms: 5,
+    sqft: 3200,
+    location: {
+      lat: 25.0329,
+      lng: 55.2167,
+      area: 'Arabian Ranches',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'garden', 'bbq'],
+    images: [
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.9,
+    reviews: 89,
+    features: {
+      furnished: true,
+      view: 'golf',
+      floor: 1
+    }
+  },
+  
+  // Property 3 - Downtown Penthouse
+  {
+    id: 'DXB-003',
+    title: 'Downtown Dubai Penthouse',
+    description: 'Luxurious penthouse with Burj Khalifa view. 3 bedrooms, private terrace, and premium amenities.',
+    price: 420000,
+    predictedPrice: 430000,
+    priceTrend: 'up',
+    type: 'penthouse',
+    bedrooms: 3,
+    bathrooms: 4,
+    sqft: 2850,
+    location: {
+      lat: 25.1972,
+      lng: 55.2744,
+      area: 'Downtown Dubai',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony', 'concierge'],
+    images: [
+      'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1499916078039-922301b0eb9b?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1505872342847-6dbb5e76cd31?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.8,
+    reviews: 67,
+    features: {
+      furnished: true,
+      view: 'burj',
+      floor: 48
+    }
+  },
+  
+  // Property 4 - JBR Beachfront
+  {
+    id: 'DXB-004',
+    title: 'JBR Beachfront Apartment',
+    description: '1 bedroom apartment steps away from JBR Beach. Modern interior with sea view.',
+    price: 95000,
+    predictedPrice: 98000,
+    priceTrend: 'up',
+    type: 'apartment',
+    bedrooms: 1,
+    bathrooms: 1,
+    sqft: 850,
+    location: {
+      lat: 25.0808,
+      lng: 55.1311,
+      area: 'JBR',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony', 'beach'],
+    images: [
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.5,
+    reviews: 156,
+    features: {
+      furnished: true,
+      view: 'sea',
+      floor: 15
+    }
+  },
+  
+  // Property 5 - Business Bay Studio
+  {
+    id: 'DXB-005',
+    title: 'Business Bay Studio',
+    description: 'Affordable studio apartment in Business Bay with city views and modern amenities.',
+    price: 55000,
+    predictedPrice: 53000,
+    priceTrend: 'down',
+    type: 'studio',
+    bedrooms: 0,
+    bathrooms: 1,
+    sqft: 550,
+    location: {
+      lat: 25.1868,
+      lng: 55.2796,
+      area: 'Business Bay',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security'],
+    images: [
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1549451371-64aa98a6f660?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.2,
+    reviews: 89,
+    features: {
+      furnished: true,
+      view: 'city',
+      floor: 12
+    }
+  },
+  
+  // Property 6 - Palm Jumeirah Villa
+  {
+    id: 'DXB-006',
+    title: 'Palm Jumeirah Luxury Villa',
+    description: '5 bedroom beachfront villa on Palm Jumeirah with private beach access.',
+    price: 550000,
+    predictedPrice: 560000,
+    priceTrend: 'up',
+    type: 'villa',
+    bedrooms: 5,
+    bathrooms: 6,
+    sqft: 5200,
+    location: {
+      lat: 25.1102,
+      lng: 55.1373,
+      area: 'Palm Jumeirah',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'garden', 'beach'],
+    images: [
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.9,
+    reviews: 42,
+    features: {
+      furnished: true,
+      view: 'sea',
+      floor: 2
+    }
+  },
+  
+  // Property 7 - JLT Apartment
+  {
+    id: 'DXB-007',
+    title: 'JLT Lake View Apartment',
+    description: 'Spacious 2 bedroom apartment overlooking JLT lakes. Family-friendly community.',
+    price: 115000,
+    predictedPrice: 120000,
+    priceTrend: 'up',
+    type: 'apartment',
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 1450,
+    location: {
+      lat: 25.0657,
+      lng: 55.1413,
+      area: 'JLT',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony'],
+    images: [
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.4,
+    reviews: 187,
+    features: {
+      furnished: true,
+      view: 'lake',
+      floor: 18
+    }
+  },
+  
+  // Property 8 - Abu Dhabi Corniche
+  {
+    id: 'AUH-001',
+    title: 'Corniche Luxury Apartment',
+    description: 'Elegant 3 bedroom apartment with panoramic Corniche views in Abu Dhabi.',
+    price: 180000,
+    predictedPrice: 185000,
+    priceTrend: 'up',
+    type: 'apartment',
+    bedrooms: 3,
+    bathrooms: 3,
+    sqft: 2200,
+    location: {
+      lat: 24.4897,
+      lng: 54.3584,
+      area: 'Corniche Area',
+      emirate: 'Abu Dhabi'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony', 'concierge'],
+    images: [
+      'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.6,
+    reviews: 92,
+    features: {
+      furnished: true,
+      view: 'sea',
+      floor: 18
+    }
+  },
+  
+  // Property 9 - Sharjah Al Nahda
+  {
+    id: 'SHJ-001',
+    title: 'Al Nahda Family Apartment',
+    description: 'Spacious 3 bedroom apartment in Al Nahda, Sharjah. Close to Dubai border.',
+    price: 65000,
+    predictedPrice: 63000,
+    priceTrend: 'down',
+    type: 'apartment',
+    bedrooms: 3,
+    bathrooms: 2,
+    sqft: 1650,
+    location: {
+      lat: 25.3207,
+      lng: 55.3928,
+      area: 'Al Nahda',
+      emirate: 'Sharjah'
+    },
+    amenities: ['parking', 'security', 'balcony'],
+    images: [
+      'https://images.unsplash.com/photo-1558036117-15e82a2c9a9a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1549451371-64aa98a6f660?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.1,
+    reviews: 112,
+    features: {
+      furnished: false,
+      view: 'city',
+      floor: 8
+    }
+  },
+  
+  // Property 10 - Townhouse
+  {
+    id: 'DXB-008',
+    title: 'Dubai Hills Townhouse',
+    description: 'Modern 3 bedroom townhouse in Dubai Hills Estate with community pool.',
+    price: 195000,
+    predictedPrice: 200000,
+    priceTrend: 'up',
+    type: 'townhouse',
+    bedrooms: 3,
+    bathrooms: 3,
+    sqft: 2200,
+    location: {
+      lat: 25.0625,
+      lng: 55.2750,
+      area: 'Dubai Hills Estate',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'garden'],
+    images: [
+      'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.6,
+    reviews: 54,
+    features: {
+      furnished: true,
+      view: 'park',
+      floor: 2
+    }
+  },
+  {
+    id: 'DXB-009',
+    title: 'Al Barsha Family Apartment',
+    description: 'Affordable 3 bedroom apartment in Al Barsha close to Mall of the Emirates.',
+    price: 85000,
+    predictedPrice: 83000,
+    predicted_rent: 79000,
+    priceTrend: 'stable',
+    type: 'apartment',
+    bedrooms: 3,
+    bathrooms: 2,
+    sqft: 1650,
+    location: {
+      lat: 25.1189,
+      lng: 55.2007,
+      area: 'Al Barsha',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'parking', 'security', 'balcony'],
+    images: [
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1549451371-64aa98a6f660?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.2,
+    reviews: 234,
+    popularity: 8.5,
+    features: {
+      furnished: false,
+      view: 'city',
+      floor: 8
+    }
+  },
+  {
+    id: 'DXB-010',
+    title: 'Motor City Studio',
+    description: 'Cozy studio apartment in Motor City with golf course views.',
+    price: 45000,
+    predictedPrice: 46000,
+    predicted_rent: 43000,
+    priceTrend: 'up',
+    type: 'studio',
+    bedrooms: 0,
+    bathrooms: 1,
+    sqft: 480,
+    location: {
+      lat: 25.0418,
+      lng: 55.2288,
+      area: 'Motor City',
+      emirate: 'Dubai'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security'],
+    images: [
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1549451371-64aa98a6f660?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.0,
+    reviews: 89,
+    popularity: 7.2,
+    features: {
+      furnished: true,
+      view: 'golf',
+      floor: 5
+    }
+  },
+  {
+    id: 'AUH-002',
+    title: 'Al Reem Island Villa',
+    description: 'Modern 5 bedroom villa with private beach access on Al Reem Island.',
+    price: 380000,
+    predictedPrice: 375000,
+    predicted_rent: 360000,
+    priceTrend: 'stable',
+    type: 'villa',
+    bedrooms: 5,
+    bathrooms: 6,
+    sqft: 4200,
+    location: {
+      lat: 24.4810,
+      lng: 54.4021,
+      area: 'Al Reem Island',
+      emirate: 'Abu Dhabi'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'garden', 'bbq', 'beach', 'maid', 'kids'],
+    images: [
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.8,
+    reviews: 45,
+    popularity: 9.1,
+    features: {
+      furnished: true,
+      view: 'sea',
+      floor: 2
+    }
+  },
+  {
+    id: 'SHJ-002',
+    title: 'Al Majaz Waterfront View',
+    description: '2 bedroom apartment with waterfront views in Al Majaz, Sharjah.',
+    price: 75000,
+    predictedPrice: 78000,
+    predicted_rent: 72000,
+    priceTrend: 'up',
+    type: 'apartment',
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 1350,
+    location: {
+      lat: 25.3284,
+      lng: 55.4013,
+      area: 'Al Majaz',
+      emirate: 'Sharjah'
+    },
+    amenities: ['pool', 'gym', 'parking', 'security', 'balcony'],
+    images: [
+      'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=1200&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=800&fit=crop'
+    ],
+    rating: 4.3,
+    reviews: 67,
+    popularity: 7.8,
+    features: {
+      furnished: true,
+      view: 'waterfront',
+      floor: 10
+    }
+  }
 
 ]

@@ -1,164 +1,124 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+  FaSearch,
+  FaUser,
+  FaHeart,
+  FaHome,
+  FaChartLine,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
+import { MdMenu, MdClose, MdCompareArrows } from "react-icons/md";
 
 const Navbar = () => {
-  const navLinkClass = ({ isActive }) =>
-    `hover:text-white ${isActive ? "text-pink-600" : "text-black"}`;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const navLinks = [
+    { name: "Home", path: "/", icon: <FaHome /> },
+    { name: "Properties", path: "/properties", icon: <FaHome /> },
+    { name: "Map View", path: "/map", icon: <FaMapMarkedAlt /> },
+    { name: "Compare", path: "/compare", icon: <MdCompareArrows /> },
+    { name: "AI Predictor", path: "/predictor", icon: <FaChartLine /> },
+    { name: "Favorites", path: "/favorites", icon: <FaHeart /> },
+  ];
+
   return (
-    <Disclosure as="nav" className="relative bg-gray-800">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon
-                aria-hidden="true"
-                className="block size-6 group-data-open:hidden"
-              />
-              <XMarkIcon
-                aria-hidden="true"
-                className="hidden size-6 group-data-open:block"
-              />
-            </DisclosureButton>
-          </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
+    <nav className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          Logo
+          <NavLink to="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-lg flex justify-center items-center">
+              <FaHome className="text-white text-xl" />
             </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                <ul className="flex justify-between items-center gap-5">
-                  <li>
-                    <NavLink to="/" className={navLinkClass}>
-                      Home
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/about" className={navLinkClass}>
-                      About
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/careers" className={navLinkClass}>
-                      Careers
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/contact" className={navLinkClass}>
-                      Contact
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">HomeWorth</h1>
+              <p className="text-xs text-gray-500">AI Rent Predictor</p>
             </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
-              type="button"
-              className="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="size-6" />
-            </button>
-
-            {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Open user menu</span>
-                <img
-                  alt=""
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
-                />
-              </MenuButton>
-
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+          </NavLink>
+          {/* Desktop */}
+          <div className="hidden md-flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-2 rounded-lg transition-colors
+             ${
+               isActive
+                 ? "bg-blue-50 text-blue-600"
+                 : "text-gray-700 hover:bg-gray-100"
+             }`
+                }
               >
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Your profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
-            </Menu>
+                <span className="mr-2">
+                  {link.icon}
+                </span>
+                {link.name}
+              </NavLink>
+            ))}
           </div>
-        </div>
-        <div className="flex items-center justify-center">
-          <div className="mb-3 md:w-96">
-              <div className="text-white">
-                <input type="search" placeholder="Search"/>
 
+          {/* Right side Actions */}
+          <div className="flex items-center space-x-4">
+            {/* Search Button */}
+            <button onClick={()=>setIsSearchOpen(!isSearchOpen)}
+            className="p-2 hover:bg-gray-100 rounded-all">
+              <FaSearch/>
+            </button>
+            {/* Favourites with Count */}
+            <NavLink to="/favorites" className="p-2 hover:bg-gary-100 rounded-full relative">
+              <FaHeart/>
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  3
+              </span>
+            </NavLink>
+            {/* User Profile */}
+            <button className="hidden md:flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg">
+              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                <FaUser/>
               </div>
+              <span className="font-medium">Profile</span>
+            </button>
+            {/* Mobile menu button */}
+            <button onClick={()=>setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
+              {isMenuOpen ? <MdClose size={4} /> : <MdMenu size={24}/>}
+            </button>
           </div>
         </div>
-      </div>
 
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          <ul className="flex justify-between items-center gap-5">
-            <li>
-              <NavLink to="/" className={navLinkClass}>
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/about" className={navLinkClass}>
-                About
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/careers" className={navLinkClass}>
-                Careers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/contact" className={navLinkClass}>
-                Contact
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
+        {/* Search Bar */}
+        {isSearchOpen && (
+          <div className="py-4 border-t">
+            <div className="relative">
+              <input type="text" placeholder="Search by location,proprty type,or amenities ... "
+              className="w-full p-4 pl-12 border rounded-lg focus:ring-blue-500"/>
+              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"/>
+              <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+              Search
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden border-t">
+            <div className="py-4 space-y-2">
+              {navLinks.map((link)=>(
+                <NavLink key={link.name} to={link.path} onClick={()=>setIsMenuOpen(false)}
+                className={({isActive})=>`flex items-center px-4 py-3 rounded-lg ${isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  <span className="mr-3">{link.icon}</span>
+                  {link.name}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 };
 
