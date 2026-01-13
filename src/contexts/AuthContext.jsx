@@ -47,32 +47,27 @@ export const AuthProvider = ({ children }) => {
 
   // Signup function
   const signup = (email, password) => {
-    console.log('🔧 AuthProvider - Signup called:', email);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   // Login function
   const login = (email, password) => {
-    console.log('🔧 AuthProvider - Login called:', email);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   // Login with Google
   const loginWithGoogle = async () => {
-    console.log('🔧 AuthProvider - Google login called');
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
   // Logout function
   const logout = () => {
-    console.log('🔧 AuthProvider - Logout called');
     return signOut(auth);
   };
 
   // Reset password
   const resetPassword = (email) => {
-    console.log('🔧 AuthProvider - Reset password called:', email);
     return sendPasswordResetEmail(auth, email);
   };
 
