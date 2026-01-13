@@ -99,7 +99,7 @@ const Properties = () => {
     }
     if (filters.bedrooms) {
       filtered = filtered.filter(
-        (p) => p.bedrooms === filters.bedrooms // FIXED: should be p.bedrooms not p.location.bedrooms
+        (p) => p.bedrooms === filters.bedrooms 
       );
     }
     if (filters.priceRange) {
