@@ -18,16 +18,16 @@ const Home = () => {
             AI-powered rental platform for UAE. Find your perfect home with
             intelligent rent estimation.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
             <Link
               to="/properties"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+              className="w-64 bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
             >
               Browse Properties
             </Link>
             <Link
               to="/predictor"
-              className="bg-transparant border-2 border-white px-8 py-3 reounded-lg font-bold hover:bg-white/10 transition-colors"
+              className="w-64 bg-transparant border-2 border-white px-8 py-3 reounded-lg font-bold hover:bg-white/10 transition-colors"
             >
               Try AI Predictor
             </Link>
