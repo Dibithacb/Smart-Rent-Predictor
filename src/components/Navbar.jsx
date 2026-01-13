@@ -10,8 +10,23 @@ const Navbar = ({onSearch}) => {
   const [search,setSearch]=useState("")
 
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    console.log(e.target.value);
+    const value = e.target.value;
+    setSearch(value);
+    console.log(value);
+    
+    // Pass search term to parent (RootLayout)
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+
+  // Clear search when closing search bar
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+    setSearch("");
+    if (onSearch) {
+      onSearch(""); // Clear search in parent
+    }
   };
  
   const authContext = useAuth();

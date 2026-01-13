@@ -10,6 +10,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import Favorites from './components/Favorites'
+import AIPredictor from './components/AIPredictor'
+
 
 const App = () => {
   return (
@@ -21,6 +23,7 @@ const App = () => {
           <Route path='/properties/:id' element={<ProperyDetails />} />
           <Route path="/map" element={<MapPage />} />
           <Route path='/compare' element={<ComparisonTool />} />
+          <Route path='/predictor' element={<AIPredictor/>}/>  
 
           {/* Auth routes */}
           <Route path="/signup" element={<Signup />} />

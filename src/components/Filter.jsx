@@ -141,7 +141,7 @@ const Filter = ({ onFilterChange }) => {
             Price Range: AED {filters.priceRange[0].toLocaleString()} - AED {filters.priceRange[1].toLocaleString()}
           </label>
           <div className="flex items-center space-x-4">
-            <input
+            {/* <input
               type="range"
               min="0"
               max="1000000"
@@ -149,12 +149,12 @@ const Filter = ({ onFilterChange }) => {
               value={filters.priceRange[0]}
               onChange={(e) => handlePriceChange(e.target.value, filters.priceRange[1])}
               className="flex-1"
-            />
+            /> */}
             <input
               type="range"
               min="0"
               max="1000000"
-              step="50000"
+              
               value={filters.priceRange[1]}
               onChange={(e) => handlePriceChange(filters.priceRange[0], e.target.value)}
               className="flex-1"
@@ -162,7 +162,7 @@ const Filter = ({ onFilterChange }) => {
           </div>
           <div className="flex justify-between text-sm text-gray-500 mt-2">
             <span>0</span>
-            <span>500,000</span>
+            {/* <span>500,000</span> */}
             <span>1,000,000</span>
           </div>
         </div>
