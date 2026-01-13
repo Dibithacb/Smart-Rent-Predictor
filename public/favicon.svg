@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- House -->
+  <path d="M8 30L32 10L56 30V54H38V38H26V54H8Z" fill="#2563EB"></path>
+
+  <!-- Graph Line -->
+  <polyline points="18,42 26,34 34,38 46,26" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+
+  <!-- Graph Dots -->
+  <circle cx="18" cy="42" r="2" fill="#FFFFFF"></circle>
+  <circle cx="26" cy="34" r="2" fill="#FFFFFF"></circle>
+  <circle cx="34" cy="38" r="2" fill="#FFFFFF"></circle>
+  <circle cx="46" cy="26" r="2" fill="#FFFFFF"></circle>
+</svg>
