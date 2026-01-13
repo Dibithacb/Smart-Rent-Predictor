@@ -1,15 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { propertyData } from "../data/propertyData";
 import Property from "./Property";
 import Filter from "./Filter";
 import { FaFilter, FaSortAmountDown, FaMapMarkedAlt } from "react-icons/fa";
 import { MdGridView, MdList } from "react-icons/md";
 
-const Properties = () => {
+
+const Properties = ({ searchTerm }) => {
   const [properties, setProperties] = useState(propertyData);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("default");
+  const [filteredProperties,setFilteredProperties]=useState(propertyData)
+  console.log(searchTerm)
+ 
+  //Apply search filter when searchTerm changes
+  useEffect(()=>{
+    let result=[...propertyData]
+    if(searchTerm && searchTerm.trim() !==""){
+      const searchTermLower=searchTerm.toLowercase().trim();
+      result=result.filter((p) =>{
+        if(!p?.location) return false;
+
+        const area=p.location?.area || '';
+        const emirate=p.location?.emirate || '';
+        const address=p.address || '';
+        const title=p.title || '';
+
+        const areaStr=String(area).toLowerCase()
+        const emirateStr=String(emirate).toLowerCase()
+        const addressStr=String(address).toLowerCase()
+        const titleStr=String(title).toLowerCase()
+
+        return (
+          areaStr.includes(searchTermLower) || emirateStr.includes(searchTermLower) || addressStr.includes(searchTermLower) || titleStr.includes(searchTermLower)
+        )
+      })
+    }
+
+  },[searchTerm,sortBy])
+
+
 
   //Handle filter changes
   const handleFilterChanges = (filters) => {

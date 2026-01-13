@@ -4,18 +4,17 @@ import { useAuth } from '../contexts/AuthContext';
 import { FaSearch, FaUser, FaHeart, FaHome, FaChartLine, FaMapMarkedAlt, FaExchangeAlt, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
 import { MdMenu, MdClose } from 'react-icons/md';
 
-const Navbar = () => {
+const Navbar = ({onSearch}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  
-  // Add debug logging
+  const [search,setSearch]=useState("")
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    console.log(e.target.value);
+  };
+ 
   const authContext = useAuth();
-  console.log('🔍 Navbar - Auth Context:', {
-    currentUser: authContext.currentUser,
-    email: authContext.currentUser?.email,
-    hasUser: !!authContext.currentUser,
-    loading: authContext.loading
-  });
   
   const { currentUser, logout, loading } = authContext;
   const navigate = useNavigate();
@@ -174,11 +173,13 @@ const Navbar = () => {
                 type="text"
                 placeholder="Search by location, property type, or amenities..."
                 className="w-full p-4 pl-12 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                value={search}
+          onChange={handleSearchChange}
               />
               <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+              {/* <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                 Search
-              </button>
+              </button> */}
             </div>
           </div>
         )}

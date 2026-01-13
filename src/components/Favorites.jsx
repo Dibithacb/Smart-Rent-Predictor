@@ -1,110 +1,161 @@
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { propertyData } from "../data/propertyData";
-import Property from "./Property";
-import { FaHeart, FaHome, FaFilter } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { propertyData } from '../data/propertyData'; // Update path as needed
+import Property from './Property'; // Update path as needed
+import { FaHeart, FaHome, FaFilter, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Favorites = () => {
-  const { user } = useAuth();
+  const { currentUser, loading: authLoading } = useAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    //simulate loading properties
-    setTimeout(() => {
-      //demo-first 3 properties in fav
-      setFavorites(propertyData.slice(0, 3));
-      setLoading(false);
-    }, 1000);
+    // Simulate loading favorites with delay
+    const loadFavorites = () => {
+      setLoading(true);
+      
+      // For demo, show first 3 properties as favorites
+      // In a real app, you would fetch user's saved properties from a database
+      setTimeout(() => {
+        setFavorites(propertyData.slice(0, 3));
+        setLoading(false);
+      }, 1000);
+    };
+
+    loadFavorites();
   }, []);
 
-  if (loading) {
+  // Show loading state
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your favorites</p>
+          <p className="text-gray-600">Loading your favorites...</p>
         </div>
       </div>
     );
   }
 
+  // Calculate stats
+  const totalProperties = favorites.length;
+  const averagePrice = totalProperties > 0 
+    ? Math.round(favorites.reduce((sum, p) => sum + p.price, 0) / totalProperties)
+    : 0;
+  const uniqueEmirates = [...new Set(favorites.map(p => p.location.emirate))].length;
+  const averageRating = totalProperties > 0
+    ? (favorites.reduce((sum, p) => sum + p.rating, 0) / totalProperties).toFixed(1)
+    : 0;
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header with user greeting */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex-items-center">
-            <FaHeart className="text-pink-500 mr-3" />
-            My Favorites
-          </h1>
-          <p className="text-gray-600">
-            Hello,{user?.email}! Here are your saved properties.
-          </p>
-        </div>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center">
+                <FaHeart className="text-red-500 mr-3" />
+                My Favorites
+              </h1>
+              <p className="text-gray-600 mt-2">
+                {currentUser ? (
+                  <>
+                    Hello, <span className="font-semibold text-blue-600">{currentUser.email}</span>! 
+                    Here are your saved properties.
+                  </>
+                ) : (
+                  "Please log in to view your favorites"
+                )}
+              </p>
+            </div>
+            
+        
+          </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow">
-            <div className="flex items-center">
-              <div className="p-3 bg-red-100 rounded-lg mr-4">
-                <FaHeart className="text-red-500 text-xl" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold">{favorites.length}</div>
-                <div className="text-gray-600">Saved Properties</div>
+          {/* Stats Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white p-4 rounded-xl shadow">
+              <div className="flex items-center">
+                <div className="p-3 bg-red-100 rounded-lg mr-3">
+                  <FaHeart className="text-red-500" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{totalProperties}</div>
+                  <div className="text-gray-600 text-sm">Saved Properties</div>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl shadow">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-lg mr-4">
-                <FaHome className="text-blue-500 text-xl" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold">
-                  AED {Math.round(favorites.reduce((sum, p) => sum + p.price, 0) / favorites.length || 0).toLocaleString()}
+            
+            <div className="bg-white p-4 rounded-xl shadow">
+              <div className="flex items-center">
+                <div className="p-3 bg-blue-100 rounded-lg mr-3">
+                  <FaHome className="text-blue-500" />
                 </div>
-                <div className="text-gray-600">Average Price</div>
+                <div>
+                  <div className="text-2xl font-bold">AED {averagePrice.toLocaleString()}</div>
+                  <div className="text-gray-600 text-sm">Average Price</div>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl shadow">
-            <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-lg mr-4">
-                <FaFilter className="text-green-500 text-xl" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold">
-                  {[...new Set(favorites.map(p => p.location.emirate))].length}
+            
+            <div className="bg-white p-4 rounded-xl shadow">
+              <div className="flex items-center">
+                <div className="p-3 bg-green-100 rounded-lg mr-3">
+                  <FaFilter className="text-green-500" />
                 </div>
-                <div className="text-gray-600">Emirates</div>
+                <div>
+                  <div className="text-2xl font-bold">{uniqueEmirates}</div>
+                  <div className="text-gray-600 text-sm">Emirates</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-4 rounded-xl shadow">
+              <div className="flex items-center">
+                <div className="p-3 bg-yellow-100 rounded-lg mr-3">
+                  <FaStar className="text-yellow-500" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{averageRating}</div>
+                  <div className="text-gray-600 text-sm">Avg. Rating</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Favorites List */}
-        <div className="bg-white rounded-xl shadow overflow-hidden">
+        <div className="bg-white rounded-xl shadow overflow-hidden mb-8">
           <div className="p-6 border-b">
-            <h2 className="text-xl font-bold">Saved Properties ({favorites.length})</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold">Saved Properties ({totalProperties})</h2>
+              {totalProperties > 0 && (
+                <Link 
+                  to="/compare" 
+                  className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+                >
+                  <FaFilter className="mr-2" />
+                  Compare All
+                </Link>
+              )}
+            </div>
           </div>
           
-          {favorites.length === 0 ? (
+          {totalProperties === 0 ? (
             <div className="p-12 text-center">
               <div className="text-6xl mb-4">💔</div>
               <h3 className="text-xl font-semibold mb-2">No favorites yet</h3>
               <p className="text-gray-600 mb-6">
                 Start saving properties by clicking the heart icon on property cards.
               </p>
-              <a 
-                href="/properties" 
-                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700"
+              <Link 
+                to="/properties" 
+                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
               >
                 Browse Properties
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
@@ -116,47 +167,94 @@ const Favorites = () => {
         </div>
 
         {/* Comparison Section */}
-        {favorites.length > 1 && (
-          <div className="mt-8 bg-white rounded-xl shadow p-6">
+        {totalProperties > 1 && (
+          <div className="bg-white rounded-xl shadow p-6">
             <h2 className="text-xl font-bold mb-4">Compare Your Favorites</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {favorites.slice(0, 3).map((property, index) => (
-                <div key={property.id} className="border rounded-lg p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {favorites.slice(0, 3).map((property) => (
+                <div key={property.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                   <img 
                     src={property.images[0]} 
                     alt={property.title}
-                    className="w-full h-40 object-cover rounded mb-3"
+                    className="w-full h-48 object-cover rounded mb-3"
                   />
-                  <h3 className="font-bold mb-2">{property.title}</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
+                  <h3 className="font-bold mb-2 text-lg">{property.title}</h3>
+                  
+                  <div className="flex items-center text-gray-600 mb-3">
+                    <FaMapMarkerAlt className="mr-2 text-red-500" />
+                    <span>{property.location.area}, {property.location.emirate}</span>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
                       <span className="text-gray-600">Price</span>
-                      <span className="font-bold">AED {property.price.toLocaleString()}</span>
+                      <span className="font-bold text-blue-600">AED {property.price.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span className="text-gray-600">Bedrooms</span>
                       <span className="font-bold">{property.bedrooms}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Bathrooms</span>
+                      <span className="font-bold">{property.bathrooms}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span className="text-gray-600">Rating</span>
-                      <span className="font-bold">⭐ {property.rating}</span>
+                      <span className="font-bold flex items-center">
+                        <FaStar className="text-yellow-500 mr-1" />
+                        {property.rating}
+                      </span>
                     </div>
                   </div>
+                  
+                  <Link 
+                    to={`/properties/${property.id}`}
+                    className="block mt-4 text-center bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    View Details
+                  </Link>
                 </div>
               ))}
             </div>
-            {favorites.length > 3 && (
+            
+            {totalProperties > 3 && (
               <div className="mt-6 text-center">
-                <a 
-                  href="/compare" 
-                  className="inline-block bg-linear-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:opacity-90"
+                <Link 
+                  to="/compare" 
+                  className="inline-block bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity"
                 >
-                  Compare All ({favorites.length})
-                </a>
+                  Compare All Properties ({totalProperties})
+                </Link>
               </div>
             )}
           </div>
         )}
+
+        {/* User Actions */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-linear-to-r from-blue-50 to-blue-100 p-6 rounded-xl">
+            <h3 className="font-bold text-lg mb-3">Need help?</h3>
+            <p className="text-gray-700 mb-4">
+              Contact our support team for assistance with your saved properties.
+            </p>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Contact Support
+            </button>
+          </div>
+          
+          <div className="bg-linear-to-r from-green-50 to-green-100 p-6 rounded-xl">
+            <h3 className="font-bold text-lg mb-3">Get AI Recommendations</h3>
+            <p className="text-gray-700 mb-4">
+              Based on your favorites, our AI can suggest similar properties you might like.
+            </p>
+            <Link 
+              to="/predictor"
+              className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Get Recommendations
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
