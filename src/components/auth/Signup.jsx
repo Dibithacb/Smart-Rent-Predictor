@@ -1,98 +1,115 @@
+// components/auth/Signup.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock, FaUser, FaGoogle, FaArrowLeft } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaGoogle, FaArrowLeft, FaSpinner } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
-    phone: ''
+    role: 'user'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   
-  // Get auth functions from context
-  const { signup, loginWithGoogle } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
-
-  // Debug log to check auth context
-  console.log('Signup - Auth Context:', { 
-    hasSignup: typeof signup === 'function',
-    loading: false 
-  });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
+    setError('');
+  };
+
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError('All fields are required');
+      return false;
+    }
+    
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return false;
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+    
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
     setError('');
-
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match');
-    }
-
-    if (formData.password.length < 6) {
-      return setError('Password must be at least 6 characters');
-    }
-
     setLoading(true);
 
     try {
-      console.log('Attempting signup with:', formData.email);
-      // Call signup function from context
-      await signup(formData.email, formData.password);
-      console.log('Signup successful, redirecting...');
-      navigate('/'); // Redirect to home after successful signup
-    } catch (error) {
-      console.error('Signup error:', error);
+      console.log('🔍 Attempting signup with:', formData.email);
       
-      // User-friendly error messages
-      let errorMessage = 'Failed to create account';
-      if (error.code === 'auth/email-already-in-use') {
-        errorMessage = 'Email already in use. Try logging in instead.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address';
-      } else if (error.code === 'auth/weak-password') {
-        errorMessage = 'Password is too weak';
-      } else if (error.message) {
-        errorMessage = error.message;
+      // Remove confirmPassword before sending to backend
+      const { confirmPassword, ...userData } = formData;
+      
+      const result = await register(userData);
+      
+      console.log('🔍 Signup result:', result);
+      
+      if (result.success) {
+        setSuccessMessage('Registration successful! Redirecting to login...');
+        
+        // Redirect to login after 2 seconds
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        setError(result.error || 'Registration failed. Please try again.');
       }
       
-      setError(errorMessage);
+    } catch (error) {
+      console.error('❌ Signup error:', error);
+      setError('An unexpected error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignup = async () => {
-    setError('');
-    setLoading(true);
+  const handleGoogleSignup = () => {
+    setError('Google signup coming soon!');
+  };
 
-    try {
-      await loginWithGoogle();
-      navigate('/');
-    } catch (error) {
-      console.error('Google signup error:', error);
-      setError(error.message || 'Failed to sign up with Google');
-    } finally {
-      setLoading(false);
-    }
+  const handleDemoFill = () => {
+    setFormData({
+      name: 'Demo User',
+      email: 'demo@example.com',
+      phone: '1234567890',
+      password: 'demo123',
+      confirmPassword: 'demo123',
+      role: 'user'
+    });
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Back to Home */}
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors">
           <FaArrowLeft className="mr-2" />
           Back to Home
         </Link>
@@ -105,20 +122,37 @@ const Signup = () => {
                 <FaUser className="text-white text-2xl" />
               </div>
               <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-              <p className="text-gray-600 mt-2">Join Smart Rent Predictor today</p>
+              <p className="text-gray-600 mt-2">Join us today</p>
             </div>
 
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">{error}</p>
+            {/* Success Message */}
+            {successMessage && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-700 text-center">{successMessage}</p>
               </div>
             )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 text-center">{error}</p>
+              </div>
+            )}
+
+            {/* Demo Fill Button */}
+            <button
+              type="button"
+              onClick={handleDemoFill}
+              className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+            >
+              📋 Fill Demo Data
+            </button>
 
             {/* Google Signup Button */}
             <button
               onClick={handleGoogleSignup}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaGoogle className="text-red-500" />
               <span className="font-medium">Sign up with Google</span>
@@ -126,12 +160,13 @@ const Signup = () => {
 
             <div className="flex items-center my-6">
               <div className="flex-1 h-px bg-gray-300"></div>
-              <span className="px-4 text-gray-500 text-sm">Or continue with email</span>
+              <span className="px-4 text-gray-500 text-sm">Or sign up with email</span>
               <div className="flex-1 h-px bg-gray-300"></div>
             </div>
 
             {/* Signup Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name
@@ -144,12 +179,14 @@ const Signup = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="John Doe"
+                    disabled={loading}
                   />
                 </div>
               </div>
 
+              {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -162,26 +199,33 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="you@example.com"
+                    disabled={loading}
                   />
                 </div>
               </div>
 
+              {/* Phone */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number (Optional)
+                  Phone Number
                 </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="+971 50 123 4567"
-                />
+                <div className="relative">
+                  <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="1234567890"
+                    disabled={loading}
+                  />
+                </div>
               </div>
 
+              {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
@@ -194,15 +238,15 @@ const Signup = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="At least 6 characters"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="••••••••"
+                    disabled={loading}
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Must be at least 6 characters long
-                </p>
+                <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
               </div>
 
+              {/* Confirm Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Confirm Password
@@ -215,37 +259,29 @@ const Signup = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Confirm your password"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    placeholder="••••••••"
+                    disabled={loading}
                   />
                 </div>
               </div>
 
-              <div className="flex items-start mt-2">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  required
-                  className="mt-1 mr-2"
-                />
-                <label htmlFor="terms" className="text-sm text-gray-600">
-                  I agree to the{' '}
-                  <Link to="/terms" className="text-blue-600 hover:underline">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/privacy" className="text-blue-600 hover:underline">
-                    Privacy Policy
-                  </Link>
-                </label>
-              </div>
+              {/* Role (Hidden - default is user) */}
+              <input type="hidden" name="role" value={formData.role} />
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" />
+                    Creating Account...
+                  </>
+                ) : (
+                  'Sign Up'
+                )}
               </button>
             </form>
 
@@ -260,8 +296,10 @@ const Signup = () => {
 
             <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-xs text-gray-500 text-center">
-                By creating an account, you can save properties, get AI predictions,
-                and receive personalized recommendations.
+                By signing up, you agree to our{' '}
+                <Link to="/terms" className="text-blue-600 hover:underline">Terms</Link>{' '}
+                and{' '}
+                <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
               </p>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { propertyData } from '../data/propertyData'; // Update path as needed
+//import { propertyData } from '../data/propertyData'; // Update path as needed
 import Property from './Property'; // Update path as needed
 import { FaHeart, FaHome, FaFilter, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import axios from 'axios';
 
 const Favorites = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -12,13 +13,13 @@ const Favorites = () => {
 
   useEffect(() => {
     // Simulate loading favorites with delay
-    const loadFavorites = () => {
+    const loadFavorites =async () => {
       setLoading(true);
-      
-      // For demo, show first 3 properties as favorites
-      // In a real app, you would fetch user's saved properties from a database
+      const response=await axios.get(`http://localhost:3000/api/users/favorites`)
+      const propertyData = response.data.favorites || response.favorites;
+      console.log(propertyData)
       setTimeout(() => {
-        setFavorites(propertyData.slice(0, 3));
+        setFavorites(propertyData);
         setLoading(false);
       }, 1000);
     };

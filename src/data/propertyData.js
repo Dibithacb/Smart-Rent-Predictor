@@ -1,5 +1,4 @@
 export const propertyData=[
-   // Property 1 - Dubai Marina Luxury
   {
     id: 'DXB-001',
     title: 'Marina View Luxury Apartment',
@@ -34,8 +33,6 @@ export const propertyData=[
       floor: 24
     }
   },
-  
-  // Property 2 - Arabian Ranches Villa
   {
     id: 'DXB-002',
     title: 'Modern Villa at Arabian Ranches',
@@ -70,8 +67,6 @@ export const propertyData=[
       floor: 1
     }
   },
-  
-  // Property 3 - Downtown Penthouse
   {
     id: 'DXB-003',
     title: 'Downtown Dubai Penthouse',
@@ -106,8 +101,6 @@ export const propertyData=[
       floor: 48
     }
   },
-  
-  // Property 4 - JBR Beachfront
   {
     id: 'DXB-004',
     title: 'JBR Beachfront Apartment',
@@ -142,8 +135,6 @@ export const propertyData=[
       floor: 15
     }
   },
-  
-  // Property 5 - Business Bay Studio
   {
     id: 'DXB-005',
     title: 'Business Bay Studio',
@@ -178,8 +169,6 @@ export const propertyData=[
       floor: 12
     }
   },
-  
-  // Property 6 - Palm Jumeirah Villa
   {
     id: 'DXB-006',
     title: 'Palm Jumeirah Luxury Villa',
@@ -214,8 +203,6 @@ export const propertyData=[
       floor: 2
     }
   },
-  
-  // Property 7 - JLT Apartment
   {
     id: 'DXB-007',
     title: 'JLT Lake View Apartment',
@@ -250,8 +237,6 @@ export const propertyData=[
       floor: 18
     }
   },
-  
-  // Property 8 - Abu Dhabi Corniche
   {
     id: 'AUH-001',
     title: 'Corniche Luxury Apartment',
@@ -286,8 +271,6 @@ export const propertyData=[
       floor: 18
     }
   },
-  
-  // Property 9 - Sharjah Al Nahda
   {
     id: 'SHJ-001',
     title: 'Al Nahda Family Apartment',
@@ -322,8 +305,6 @@ export const propertyData=[
       floor: 8
     }
   },
-  
-  // Property 10 - Townhouse
   {
     id: 'DXB-008',
     title: 'Dubai Hills Townhouse',

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   FaBed,
   FaBath,
@@ -8,15 +9,95 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useFavorites } from "../contexts/FavoriteContext";
 
 const Property = ({ property }) => {
+  const { updateFavoriteCount } = useFavorites();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [loading,setLoading]=useState(false)
 
-  const handleFavorite = (e) => {
+  const {currentUser}=useAuth()
+  const navigate=useNavigate()
+
+  //check if property is in user's favorites
+  useEffect(()=>{
+    if(currentUser && property?._id){
+      checkIfFavorite()
+    }
+  },[currentUser,property?._id])
+
+  const checkIfFavorite=async () => {
+    try {
+      const response=await axios.get(`http://localhost:3000/api/users/checkFavorite/${property._id}`,
+        {withCredentials:true}
+      )
+      setIsFavorite(response.data.isFavorite)
+    } catch (error) {
+      console.error('Error checking favorite status:',error)
+    }
+  }
+
+  const handleFavorite = async(e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsFavorite(!isFavorite);
+
+    //check if user is logged in
+    if(!currentUser){
+      //Redirect to login page with return URL
+      navigate('/login',{
+        state:{from:`/properties/${property.id}`},
+        replace:true
+      })
+      return
+    }
+    try {
+      setLoading(true)
+      if(isFavorite){
+        //Remove from favorites
+        const response=await axios.delete(`http://localhost:3000/api/users/removeFavorite/${property._id}`,
+          {withCredentials:true}
+        )
+
+        if(response.data.success){
+          setIsFavorite(false)
+           updateFavoriteCount();
+          console.log('Removed from favorites')
+        }
+      }else{
+        //Add to favorites
+        const response=await axios.post(`http://localhost:3000/api/users/addFavorite`,
+          {propertyId:property._id},
+          {withCredentials:true,
+            headers: {
+          'Content-Type': 'application/json'
+        }
+          }
+        )
+
+        if(response.data.success){
+          setIsFavorite(true)
+           updateFavoriteCount();
+          console.log('Added to favorites')
+        }
+      }
+    } catch (error) {
+      console.error('Error updating favorite:',error)
+      //Handle specific error cases
+      if(error.response?.status===401){
+        navigate('/login',{
+          state:{from:`/properties/${property._id}`},
+          replace:true
+        })
+      }else if(error.response?.status===400){
+        alert(error.response.data.message || 'Error updating favorite')
+      }else{
+        alert('Something went wrong. Please try again.')
+      }
+    }finally{
+      setLoading(false)
+    }
   };
 
   const getPriceTrendIcon = () => {
@@ -33,14 +114,19 @@ const Property = ({ property }) => {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group">
       <div className="relative h-64 overflow-hidden">
         <img
-          src={property.images[0]}
+          src={property.images?.[0] || 'https://via.placeholder.com/400x300'}
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
+
+        {/* favorite button */}
         <div className="absolute top-3 right-3">
           <button
             onClick={handleFavorite}
-            className="bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-red-100 transition-colors"
+            disabled={loading}
+            className={`bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-red-100 transition-colors
+               ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+               title={currentUser ? 'Add to favorites' : 'Login to add favorites'}
           >
             <FaHeart
               className={isFavorite ? "text-red-500" : "text-gray-400"}

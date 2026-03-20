@@ -1,33 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { propertyData } from "../data/propertyData";
 import Property from "./Property";
 import Filter from "./Filter";
-import { FaFilter, FaSortAmountDown, FaMapMarkedAlt } from "react-icons/fa";
+import { FaFilter, FaMapMarkedAlt } from "react-icons/fa";
 import { MdGridView, MdList } from "react-icons/md";
 import { useOutletContext } from "react-router-dom";
+import axios from "axios";
 
 const Properties = () => {
-  // Get searchTerm from context - add debug
+  // Get searchTerm from context
   const context = useOutletContext();
   const searchTerm = context?.searchTerm || '';
   
   console.log("Properties Component - searchTerm:", searchTerm);
   console.log("Full context:", context);
   
-  const [properties, setProperties] = useState(propertyData);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("default");
-  const [filteredProperties, setFilteredProperties] = useState(propertyData);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:3000/api/property/getProperties');
+        console.log('API Response:', response.data);
+        
+        // Extract the data array from response
+        const propertyData = response.data.data || response.data;
+        console.log(propertyData)
+        setProperties(propertyData);
+        setFilteredProperties(propertyData);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
 
   // Apply search filter when searchTerm changes
   useEffect(() => {
+    if (properties.length === 0) return;
+    
     console.log("useEffect running with searchTerm:", searchTerm);
     
-    let result = [...propertyData];
+    let result = [...properties];
     
     if (searchTerm && searchTerm.trim() !== "") {
-      const searchTermLower = searchTerm.toLowerCase().trim(); // FIXED: toLowerCase()
+      const searchTermLower = searchTerm.toLowerCase().trim();
       console.log("Searching for:", searchTermLower);
       
       result = result.filter((p) => {
@@ -46,18 +72,12 @@ const Properties = () => {
         const addressStr = String(address).toLowerCase();
         const titleStr = String(title).toLowerCase();
 
-        const matches = (
+        return (
           areaStr.includes(searchTermLower) || 
           emirateStr.includes(searchTermLower) || 
           addressStr.includes(searchTermLower) || 
           titleStr.includes(searchTermLower)
         );
-        
-        if (matches) {
-          console.log("Matched property:", p.title);
-        }
-        
-        return matches;
       });
       
       console.log("Filtered result count:", result.length);
@@ -66,13 +86,12 @@ const Properties = () => {
     // Apply sorting
     result = sortProperties(result, sortBy);
     setFilteredProperties(result);
-    setProperties(result); // Also update properties state for display
 
-  }, [searchTerm, sortBy]);
+  }, [searchTerm, sortBy, properties]);
 
   // Handle filter changes
   const handleFilterChanges = (filters) => {
-    let filtered = [...propertyData];
+    let filtered = [...properties];
 
     // Apply search filter first if searchTerm exists
     if (searchTerm && searchTerm.trim() !== "") {
@@ -98,9 +117,7 @@ const Properties = () => {
       filtered = filtered.filter((p) => p.location?.area === filters.area);
     }
     if (filters.bedrooms) {
-      filtered = filtered.filter(
-        (p) => p.bedrooms === filters.bedrooms 
-      );
+      filtered = filtered.filter((p) => p.bedrooms === parseInt(filters.bedrooms));
     }
     if (filters.priceRange) {
       filtered = filtered.filter(
@@ -120,16 +137,14 @@ const Properties = () => {
     // Apply sorting
     filtered = sortProperties(filtered, sortBy);
     setFilteredProperties(filtered);
-    setProperties(filtered);
   };
 
   // Handle sort change
   const handleSortChange = (e) => {
     const value = e.target.value;
     setSortBy(value);
-    const sorted = sortProperties([...filteredProperties], value); // Use filteredProperties
+    const sorted = sortProperties([...filteredProperties], value);
     setFilteredProperties(sorted);
-    setProperties(sorted);
   };
 
   const sortProperties = (propertiesList, sortType) => {
@@ -150,9 +165,20 @@ const Properties = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading properties...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header - Show search term if exists */}
+      {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
           Smart Rent Predictor
@@ -167,8 +193,6 @@ const Properties = () => {
               Showing results for: <span className="font-semibold">"{searchTerm}"</span>
               <button 
                 onClick={() => {
-                  // To clear search, you'll need to pass a function from parent
-                  // For now, reload the page
                   window.location.href = '/properties';
                 }}
                 className="ml-3 text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200"
@@ -248,28 +272,15 @@ const Properties = () => {
         )}
       </div>
 
-      {/* Properties Grid/List - Use filteredProperties */}
-      <div
-        className={
-          viewMode === "grid"
-            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            : "space-y-6"
-        }
-      >
-        {filteredProperties.map((property) => (
-          <Property key={property.id} property={property} viewMode={viewMode} />
-        ))}
-      </div>
-
-      {/* No result */}
-      {filteredProperties.length === 0 && (
+      {/* Properties Grid/List */}
+      {filteredProperties.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-5xl mb-4">🏠</div>
           <h3 className="text-xl font-semibold mb-2">No properties found</h3>
           <p className="text-gray-600">
             {searchTerm 
               ? `No properties found for "${searchTerm}". Try a different search term.`
-              : "Try adjusting your filters to see more results"}
+              : "No properties available at the moment."}
           </p>
           {searchTerm && (
             <button
@@ -279,6 +290,18 @@ const Properties = () => {
               View All Properties
             </button>
           )}
+        </div>
+      ) : (
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              : "space-y-6"
+          }
+        >
+          {filteredProperties.map((property) => (
+            <Property key={property.id || property._id} property={property} viewMode={viewMode} />
+          ))}
         </div>
       )}
     </div>

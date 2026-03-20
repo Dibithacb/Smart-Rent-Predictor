@@ -19,7 +19,7 @@ State Management: Context
 Routing: React Router
 
 Optional Feature:-
-AI predictor- OCurrently paused until backend development is completed.
+AI predictor- Currently paused until backend development is completed.
 
 
 

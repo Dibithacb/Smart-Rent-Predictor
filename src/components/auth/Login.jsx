@@ -1,8 +1,8 @@
+// components/auth/Login.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock, FaGoogle, FaArrowLeft } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaGoogle, FaArrowLeft, FaSpinner } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
-
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -11,23 +11,17 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   
-  // Get auth functions from context
-  const { login, loginWithGoogle, resetPassword, currentUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  // Debug log to check auth context
-  console.log('Login - Auth Context:', { 
-    hasLogin: typeof login === 'function',
-    currentUser,
-    loading: false 
-  });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -36,71 +30,47 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Attempting login with:', formData.email);
-      // Call login function from context
-      await login(formData.email, formData.password);
-      console.log('Login successful, redirecting...');
-      navigate('/'); // Redirect to home after successful login
-    } catch (error) {
-      console.error('Login error:', error);
+      console.log('🔍 Attempting login with:', formData.email);
       
-      // User-friendly error messages
-      let errorMessage = 'Failed to sign in';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password';
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Too many failed attempts. Please try again later';
-      } else if (error.message) {
-        errorMessage = error.message;
+      const result = await login(formData.email, formData.password);
+      
+      console.log('🔍 Login result:', result);
+      
+      if (result.success) {
+        setSuccessMessage('Login successful! Redirecting...');
+        
+        // Small delay then navigate
+        setTimeout(() => {
+          navigate('/properties');
+        }, 1000);
+      } else {
+        setError(result.error || 'Login failed. Please check your credentials.');
       }
       
-      setError(errorMessage);
+    } catch (error) {
+      console.error('❌ Login error:', error);
+      setError('An unexpected error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleLogin = async () => {
-    setError('');
-    setLoading(true);
-
-    try {
-      await loginWithGoogle();
-      navigate('/');
-    } catch (error) {
-      console.error('Google login error:', error);
-      setError(error.message || 'Failed to sign in with Google');
-    } finally {
-      setLoading(false);
-    }
+  const handleGoogleLogin = () => {
+    setError('Google login coming soon!');
   };
 
-  const handleForgotPassword = async () => {
-    if (!formData.email) {
-      return setError('Please enter your email address');
-    }
-
-    setError('');
-    setLoading(true);
-
-    try {
-      await resetPassword(formData.email);
-      setError('Password reset email sent! Check your inbox.');
-    } catch (error) {
-      console.error('Reset password error:', error);
-      setError(error.message || 'Failed to send reset email');
-    } finally {
-      setLoading(false);
-    }
+  const handleDemoLogin = () => {
+    setFormData({
+      email: 'demo@example.com',
+      password: 'demo123'
+    });
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Back to Home */}
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors">
           <FaArrowLeft className="mr-2" />
           Back to Home
         </Link>
@@ -116,21 +86,34 @@ const Login = () => {
               <p className="text-gray-600 mt-2">Sign in to your account</p>
             </div>
 
-            {error && (
-              <div className={`mb-6 p-4 rounded-lg ${
-                error.includes('sent') 
-                  ? 'bg-green-50 border border-green-200 text-green-700'
-                  : 'bg-red-50 border border-red-200 text-red-600'
-              }`}>
-                <p className="text-sm">{error}</p>
+            {/* Success Message */}
+            {successMessage && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-700 text-center">{successMessage}</p>
               </div>
             )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600 text-center">{error}</p>
+              </div>
+            )}
+
+            {/* Demo Login Button */}
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+            >
+              📋 Use Demo Credentials
+            </button>
 
             {/* Google Login Button */}
             <button
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaGoogle className="text-red-500" />
               <span className="font-medium">Sign in with Google</span>
@@ -156,8 +139,9 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="you@example.com"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -167,13 +151,12 @@ const Login = () => {
                   <label className="block text-sm font-medium text-gray-700">
                     Password
                   </label>
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
+                  <Link 
+                    to="/forgot-password"
                     className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
                 <div className="relative">
                   <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -183,8 +166,9 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Enter your password"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -192,9 +176,16 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-bold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? (
+                  <>
+                    <FaSpinner className="animate-spin mr-2" />
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </button>
             </form>
 
@@ -211,7 +202,14 @@ const Login = () => {
               <p className="text-xs text-gray-500 text-center">
                 Demo credentials for testing:
                 <br />
-                Email: demo@example.com | Password: demo123
+                <span className="font-mono">alan@gmail.com | alan@1998</span>
+                <br />
+                <button 
+                  onClick={handleDemoLogin}
+                  className="text-blue-600 hover:text-blue-800 text-xs mt-1"
+                >
+                  Click to auto-fill
+                </button>
               </p>
             </div>
           </div>
