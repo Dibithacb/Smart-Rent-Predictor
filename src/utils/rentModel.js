@@ -193,6 +193,7 @@ class RentPredictionModel {
     const trainLabels = tf.tensor2d(trainingData.labels, [trainingData.labels.length, 1]);
     
     // Convert validation data to tensors
+    //TensorFlow works with tensors (multi-dimensional arrays). This converts our JavaScript arrays into tensors the model can process.
     const valFeatures = tf.tensor2d(validationData.features.map(f => [
       f.emirateCode, f.areaCode, f.bedrooms, f.sqft, 
       f.propertyTypeCode, f.yearBuiltCode, f.amenitiesCount
@@ -201,9 +202,9 @@ class RentPredictionModel {
     
     // Train the model
     const history = await this.model.fit(trainFeatures, trainLabels, {
-      epochs,
-      batchSize,
-      validationData: [valFeatures, valLabels],
+      epochs, // 80 passes through entire dataset
+      batchSize,// 32 samples processed at a time
+      validationData: [valFeatures, valLabels],// Test data
       callbacks: {
         onEpochEnd: (epoch, logs) => {
           if (epoch % 10 === 0) {
@@ -240,7 +241,7 @@ class RentPredictionModel {
       yearBuiltCode: (features.yearBuilt - 2000) / 30,
       amenitiesCount: features.amenities.length / 8
     };
-    
+     // Create input tensor
     const inputTensor = tf.tensor2d([[
       normalizedFeatures.emirateCode,
       normalizedFeatures.areaCode,
@@ -250,7 +251,7 @@ class RentPredictionModel {
       normalizedFeatures.yearBuiltCode,
       normalizedFeatures.amenitiesCount
     ]]);
-    
+      // Get prediction
     const prediction = this.model.predict(inputTensor);
     const predictedRent = (await prediction.data())[0];
     
