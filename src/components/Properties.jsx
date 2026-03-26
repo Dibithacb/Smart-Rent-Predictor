@@ -5,7 +5,7 @@ import { FaFilter, FaMapMarkedAlt } from "react-icons/fa";
 import { MdGridView, MdList } from "react-icons/md";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
-
+const URL=import.meta.env.VITE_API_URL
 const Properties = () => {
   // Get searchTerm from context
   const context = useOutletContext();
@@ -26,7 +26,7 @@ const Properties = () => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/property/getProperties');
+        const response = await axios.get(`${URL}/api/property/getProperties`);
         console.log('API Response:', response.data);
         
         // Extract the data array from response

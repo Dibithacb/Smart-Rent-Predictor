@@ -12,7 +12,7 @@ import { MdLocationOn } from "react-icons/md";
 import { NavLink,useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useFavorites } from "../contexts/FavoriteContext";
-
+const URL=import.meta.env.VITE_API_URL
 const Property = ({ property }) => {
   const { updateFavoriteCount } = useFavorites();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -30,7 +30,7 @@ const Property = ({ property }) => {
 
   const checkIfFavorite=async () => {
     try {
-      const response=await axios.get(`http://localhost:3000/api/users/checkFavorite/${property._id}`,
+      const response=await axios.get(`${URL}/api/users/checkFavorite/${property._id}`,
         {withCredentials:true}
       )
       setIsFavorite(response.data.isFavorite)
@@ -56,7 +56,7 @@ const Property = ({ property }) => {
       setLoading(true)
       if(isFavorite){
         //Remove from favorites
-        const response=await axios.delete(`http://localhost:3000/api/users/removeFavorite/${property._id}`,
+        const response=await axios.delete(`${URL}/api/users/removeFavorite/${property._id}`,
           {withCredentials:true}
         )
 
@@ -67,7 +67,7 @@ const Property = ({ property }) => {
         }
       }else{
         //Add to favorites
-        const response=await axios.post(`http://localhost:3000/api/users/addFavorite`,
+        const response=await axios.post(`${URL}/api/users/addFavorite`,
           {propertyId:property._id},
           {withCredentials:true,
             headers: {

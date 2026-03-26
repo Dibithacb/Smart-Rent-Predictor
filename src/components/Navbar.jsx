@@ -1,4 +1,3 @@
-// components/Navbar.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -17,47 +16,17 @@ const Navbar = ({ onSearch }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [search, setSearch] = useState("");
- // const [favoriteCount,setFavoriteCount]=useState(0)
+  //const [favoriteCount,setFavoriteCount]=useState(0)
   const [loadingCount,SetLoadingCount]=useState(0)
 
   const { currentUser, logout, loading } = useAuth();
   const {favoriteCount}=useFavorites()
-  console.log(favoriteCount)
+  console.log("favoriteCount" + favoriteCount)
   const navigate = useNavigate();
 
   // Use displayUser directly from currentUser - no extra state
   const displayUser = currentUser;
 
-  //fetch favorite count when user is looged in
-  // useEffect(()=>{
-  //   if(currentUser){
-  //     fetchFavoriteCount()
-  //   }else{
-  //     setFavoriteCount(0)
-  //   }
-  // },[currentUser])
-
-  // const fetchFavoriteCount=async () => {
-  //   try {
-  //     SetLoadingCount(true)
-  //     const response=await axios.get('http://localhost:3000/api/users/favoriteCount',
-  //       {withCredentials:true}
-  //     )
-
-  //     if(response.data.success){
-  //       setFavoriteCount(response.data.count)
-  //     }
-  //   } catch (error) {
-  //      console.error('Error fetching favorite count:', error);
-  //   }finally{
-  //     SetLoadingCount(false)
-  //   }
-  // }
-
-  //update count when favorite is added/ removed
-  // const updateFavoriteCount=()=>{
-  //   fetchFavoriteCount()
-  // }
   const navLinks = [
     { name: 'Home', path: '/', icon: <FaHome /> },
     { name: 'Properties', path: '/properties', icon: <FaHome /> },

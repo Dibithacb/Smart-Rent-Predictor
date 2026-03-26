@@ -5,7 +5,7 @@ import { FaHeart, FaHome, FaFilter, FaStar, FaMapMarkerAlt } from 'react-icons/f
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
-
+const URL=import.meta.env.VITE_API_URL
 const Favorites = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const [favorites, setFavorites] = useState([]);
@@ -15,7 +15,7 @@ const Favorites = () => {
     // Simulate loading favorites with delay
     const loadFavorites =async () => {
       setLoading(true);
-      const response=await axios.get(`http://localhost:3000/api/users/favorites`)
+      const response=await axios.get(`${URL}/api/users/favorites`)
       const propertyData = response.data.favorites || response.favorites;
       console.log(propertyData)
       setTimeout(() => {

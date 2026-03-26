@@ -1,8 +1,8 @@
 // contexts/FavoriteContext.jsx
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
-
+const URL=import.meta.env.VITE_API_URL
 const FavoriteContext = createContext();
 
 export const useFavorites = () => {
@@ -15,7 +15,7 @@ export const useFavorites = () => {
 
 export const FavoriteProvider = ({ children }) => {
   const [favoriteCount, setFavoriteCount] = useState(0);
-  const { currentUser } = useAuth();
+  const { currentUser,loading } = useAuth();
 
   const fetchFavoriteCount = useCallback(async () => {
     if (!currentUser) {
@@ -25,7 +25,7 @@ export const FavoriteProvider = ({ children }) => {
     
     try {
       const response = await axios.get(
-        'http://localhost:3000/api/users/favoriteCount',
+        `${URL}/api/users/favoriteCount`,
         { withCredentials: true }
       );
       if (response.data.success) {
@@ -36,8 +36,22 @@ export const FavoriteProvider = ({ children }) => {
     }
   }, [currentUser]);
 
-  const updateFavoriteCount = useCallback(() => {
-    fetchFavoriteCount();
+  useEffect(()=>{
+    if(currentUser && !loading){
+      fetchFavoriteCount();
+    }else if(!currentUser && !loading){
+      setFavoriteCount(0)
+    }
+  },[currentUser,loading,fetchFavoriteCount])
+
+  useEffect(()=>{
+    if(currentUser && !loading){
+      fetchFavoriteCount()
+    }
+  },[])
+
+  const updateFavoriteCount = useCallback(async() => {
+    await fetchFavoriteCount();
   }, [fetchFavoriteCount]);
 
   return (

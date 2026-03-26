@@ -1,7 +1,7 @@
 // contexts/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
+const URL=import.meta.env.VITE_API_URL
 // Create context with default values
 const AuthContext = createContext({
   currentUser: null,
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   // Configure axios defaults
   axios.defaults.withCredentials = true;
-  const API_URL = 'http://localhost:3000/api/users';
+  const API_URL = `${URL}/api/users`;
 
   // Check if user is logged in on mount
   useEffect(() => {
