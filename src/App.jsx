@@ -11,6 +11,9 @@ import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import Favorites from './components/Favorites'
 import AIPredictor from './components/AIPredictor'
+import AdminDashboard from './components/admin/AdminDashboard'
+import EditProperty from './components/admin/EditProperty'
+import AddProperty from './components/admin/AddProperty'
 
 
 const App = () => {
@@ -28,6 +31,11 @@ const App = () => {
           {/* Auth routes */}
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+
+          {/* Admin dashboard */}
+          <Route path="/admin" element={<AdminDashboard/>} />
+          <Route path="/admin/edit-property/:id" element={<EditProperty/>} />
+          <Route path="/admin/add-property" element={<AddProperty/>} />
 
           {/* Protected Routes - Require Login */}
           <Route path='/favorites' element={

@@ -55,6 +55,7 @@ const Home = () => {
             </div>
             <h3 className="text-4xl font-bold mb-2">AI Predictions</h3>
             <p className="text-gray-600">
+              {/* <Link to="/predictor">Get accurate rent predictions using machine learning algorithms.</Link> */}
               Get accurate rent predictions using machine learning algorithms.
             </p>
           </div>

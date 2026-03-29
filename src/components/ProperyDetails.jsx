@@ -360,7 +360,7 @@ const PropertyDetails = () => {
             </div>
 
             {/* Rent Calculator */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            {/* <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4">AI Rent Calculator</h3>
               <div className="space-y-4">
                 <div>
@@ -393,10 +393,10 @@ const PropertyDetails = () => {
                   Calculate Rent Prediction
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {/* Similar Properties */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            {/* <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4">Similar Properties</h3>
               <div className="space-y-4">
                 {propertyData
@@ -420,7 +420,7 @@ const PropertyDetails = () => {
                     </div>
                   ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

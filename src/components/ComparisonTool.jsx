@@ -98,7 +98,7 @@ const ComparisonTool = () => {
             </div>
 
             {/* AI Recommendation */}
-            <div className="border-t p-6 bg-linear-to-r from-blue-50 to-indigo-50">
+            {/* <div className="border-t p-6 bg-linear-to-r from-blue-50 to-indigo-50">
               <h3 className="text-xl font-bold mb-4 flex items-center">
                 <FaChartLine className="mr-2" />
                 AI Recommendation
@@ -142,7 +142,7 @@ const ComparisonTool = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         )}
 

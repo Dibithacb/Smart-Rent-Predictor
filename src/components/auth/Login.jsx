@@ -60,8 +60,15 @@ const Login = () => {
 
   const handleDemoLogin = () => {
     setFormData({
-      email: 'demo@example.com',
-      password: 'demo123'
+      email: 'alan@gmail.com',
+      password: 'alan@1998'
+    });
+  };
+
+  const handleDemoLogin_admin = () => {
+    setFormData({
+      email: 'sara@gmail.com',
+      password: 'sara@1234'
     });
   };
 
@@ -99,24 +106,34 @@ const Login = () => {
               </div>
             )}
 
-            {/* Demo Login Button */}
+            {/*User- Demo Login Button */}
             <button
               type="button"
               onClick={handleDemoLogin}
               className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
             >
-              📋 Use Demo Credentials
+              📋Use User Demo Credentials
             </button>
 
-            {/* Google Login Button */}
+            {/*Admin- Demo Login Button */}
             <button
+              type="button"
+              onClick={handleDemoLogin_admin}
+              className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+            >
+              📋Use Admin Demo Credentials
+            </button>
+
+
+            {/* Google Login Button */}
+            {/* <button
               onClick={handleGoogleLogin}
               disabled={loading}
               className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaGoogle className="text-red-500" />
               <span className="font-medium">Sign in with Google</span>
-            </button>
+            </button> */}
 
             <div className="flex items-center my-6">
               <div className="flex-1 h-px bg-gray-300"></div>

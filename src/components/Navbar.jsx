@@ -36,6 +36,10 @@ const Navbar = ({ onSearch }) => {
     { name: 'Favorites', path: '/favorites', icon: <FaHeart /> },
   ];
 
+  if(currentUser?.role=="admin"){
+    navLinks.push({name:'Admin Dashboard',path:'/admin',icon:<FaCog/>})
+  }
+
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
@@ -187,7 +191,7 @@ const Navbar = ({ onSearch }) => {
                       )}
                     </div>
                     
-                    <NavLink
+                    {/* <NavLink
                       to="/profile"
                       className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserMenu(false)}
@@ -203,9 +207,9 @@ const Navbar = ({ onSearch }) => {
                     >
                       <FaCog className="mr-3 text-gray-500" />
                       Settings
-                    </NavLink>
+                    </NavLink> */}
                     
-                    <div className="border-t my-1"></div>
+                    {/* <div className="border-t my-1"></div> */}
                     
                     <button
                       onClick={handleLogout}
@@ -313,7 +317,7 @@ const Navbar = ({ onSearch }) => {
                       </div>
                     </div>
 
-                    <NavLink
+                    {/* <NavLink
                       to="/profile"
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mt-2"
@@ -329,7 +333,7 @@ const Navbar = ({ onSearch }) => {
                     >
                       <FaCog className="mr-3 text-gray-500" />
                       Settings
-                    </NavLink>
+                    </NavLink> */}
 
                     <button
                       onClick={handleLogout}

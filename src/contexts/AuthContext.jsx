@@ -167,17 +167,23 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true
       });
       
-      console.log('✅ Login response:', response.data);
-      console.log('✅ Login status:', response.status);
+      console.log('Login response:', response.data);
+      console.log('Login status:', response.status);
       
       if (response.status === 200) {
         // Login successful - token is set in cookie by backend
-        // Create user object from email
-        const user = { email };
-        
+        const user = { 
+          email:response.data.user?.email || email,
+          name:response.data.user?.name || '',
+          role:response.data.user?.role || 'user',
+          id:response.data.user?.id
+         };
+         
+         console.log('User data from login:',user)
+         console.log('User role:',user.role)
         setCurrentUser(user);
         localStorage.setItem('user', JSON.stringify(user));
-        console.log('✅ User set in context:', user.email);
+        console.log('User set in context:', user.email);
         
         return { 
           success: true, 

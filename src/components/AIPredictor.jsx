@@ -141,11 +141,11 @@ const RentPredictor = () => {
               AI Rent Predictor
             </h1>
           </div>
-          <p className="text-gray-600 text-lg">Powered by TensorFlow.js Neural Network • Trained on 10,000+ UAE properties</p>
-          <div className="mt-2 inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+          {/* <p className="text-gray-600 text-lg">• Trained on 10,000+ UAE properties</p> */}
+          {/* <div className="mt-2 inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
             <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
             AI Model Ready
-          </div>
+          </div> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
