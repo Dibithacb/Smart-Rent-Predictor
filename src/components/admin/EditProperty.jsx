@@ -3,16 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { 
-  FaArrowLeft, FaSave, FaTimes, FaPlus, FaTrash, 
+  FaArrowLeft, FaSave, FaPlus, FaTrash, 
   FaImage, FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt,
-  FaBuilding, FaStar, FaHeart, FaChartLine,
-  FaCheck, FaSpinner, FaLink, FaEye, FaEdit, FaDollarSign
+  FaBuilding, FaStar, FaCheck, FaSpinner, FaLink, FaEye, FaDollarSign
 } from 'react-icons/fa';
 
 const URL = import.meta.env.VITE_API_URL;
+const FALLBACK_IMAGE = 'https://placehold.co/400x300/3498db/white?text=No+Image';
 
 const EditProperty = () => {
-  const { id } = useParams(); // Get property ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -70,7 +70,6 @@ const EditProperty = () => {
     { id: 'features', label: 'Features', icon: <FaStar /> }
   ];
 
-  // Fetch property data on mount
   useEffect(() => {
     if (id) {
       fetchProperty();
@@ -80,13 +79,13 @@ const EditProperty = () => {
   const fetchProperty = async () => {
     try {
       setFetching(true);
-      console.log('Fetching property with ID:', id);
+      console.log('🔍 Fetching property with ID:', id);
       
       const response = await axios.get(`${URL}/api/property/getProperty/${id}`, {
         withCredentials: true
       });
       
-      console.log('Property data:', response.data);
+      console.log('✅ Property data received:', response.data);
       const property = response.data.data;
       
       if (property) {
@@ -119,7 +118,7 @@ const EditProperty = () => {
         });
       }
     } catch (error) {
-      console.error('Error fetching property:', error);
+      console.error('❌ Error fetching property:', error);
       alert('Failed to load property data');
       navigate('/admin');
     } finally {
@@ -175,27 +174,68 @@ const EditProperty = () => {
     
     try {
       const propertyData = {
-        ...formData,
+        id: formData.id,
+        title: formData.title,
+        description: formData.description,
         price: parseFloat(formData.price),
         predictedPrice: formData.predictedPrice ? parseFloat(formData.predictedPrice) : undefined,
+        priceTrend: formData.priceTrend,
+        type: formData.type,
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         sqft: parseInt(formData.sqft) || 0,
+        location: {
+          lat: formData.location.lat ? parseFloat(formData.location.lat) : undefined,
+          lng: formData.location.lng ? parseFloat(formData.location.lng) : undefined,
+          area: formData.location.area,
+          emirate: formData.location.emirate
+        },
+        amenities: formData.amenities,
+        images: formData.images,
         rating: formData.rating ? parseFloat(formData.rating) : 0,
-        reviews: parseInt(formData.reviews) || 0
+        reviews: parseInt(formData.reviews) || 0,
+        features: {
+          furnished: formData.features.furnished,
+          view: formData.features.view,
+          floor: formData.features.floor ? parseInt(formData.features.floor) : undefined
+        }
       };
       
-      console.log('Updating property:', propertyData);
+      console.log('📤 Updating property at:', `${URL}/api/property/updateProperty/${id}`);
+      console.log('📦 Update data:', propertyData);
       
-      await axios.put(`${URL}/api/property/updateProperty/${id}`, propertyData, {
-        withCredentials: true
+      // ✅ Make sure the endpoint matches your backend route
+      const response = await axios.put(`${URL}/api/property/updateProperty/${id}`, propertyData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       
-      alert('Property updated successfully!');
-      navigate('/admin');
+      console.log('✅ Update response:', response.data);
+      
+      if (response.data.success) {
+        alert('✅ Property updated successfully!');
+        navigate('/admin');
+      } else {
+        alert(response.data.message || 'Failed to update property');
+      }
     } catch (error) {
-      console.error('Error updating property:', error);
-      alert(error.response?.data?.message || 'Failed to update property');
+      console.error('❌ Error updating property:', error);
+      console.error('❌ Error response:', error.response?.data);
+      
+      if (error.response?.status === 401) {
+        alert('❌ You are not authorized. Please login as admin.');
+        navigate('/login');
+      } else if (error.response?.status === 403) {
+        alert('❌ You do not have admin privileges.');
+      } else if (error.response?.status === 404) {
+        alert('❌ Property not found or update endpoint is incorrect.\n\nMake sure your backend route is: PUT /api/property/updateProperty/:id');
+      } else if (error.response?.status === 400) {
+        alert(`❌ Invalid data: ${error.response.data?.message || 'Please check your inputs.'}`);
+      } else {
+        alert(`❌ Failed to update property: ${error.response?.data?.message || 'Unknown error occurred'}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -219,10 +259,7 @@ const EditProperty = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/admin')}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
+              <button onClick={() => navigate('/admin')} className="p-2 hover:bg-gray-100 rounded-full">
                 <FaArrowLeft className="text-gray-600" />
               </button>
               <div>
@@ -235,16 +272,13 @@ const EditProperty = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => navigate('/admin')}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
+              <button onClick={() => navigate('/admin')} className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-6 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all flex items-center space-x-2 disabled:opacity-50"
+                className="px-6 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 flex items-center space-x-2 disabled:opacity-50"
               >
                 {loading ? (
                   <>
@@ -282,410 +316,64 @@ const EditProperty = () => {
                   >
                     <span className="text-lg">{section.icon}</span>
                     <span className="font-medium">{section.label}</span>
-                    {activeSection === section.id && (
-                      <FaCheck className="ml-auto text-green-500 text-sm" />
-                    )}
+                    {activeSection === section.id && <FaCheck className="ml-auto text-green-500" />}
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Main Form */}
+          {/* Main Form - Simplified for clarity */}
           <div className="flex-1">
             <form>
               {/* Basic Info Section */}
               <div className={`space-y-6 ${activeSection === 'basic' ? 'block' : 'hidden'}`}>
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <h2 className="text-xl font-bold mb-6">Basic Information</h2>
-                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Property ID <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="id"
-                        value={formData.id}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
+                      <label className="block text-sm font-medium mb-2">Property ID *</label>
+                      <input type="text" name="id" value={formData.id} onChange={handleInputChange} className="w-full border rounded-lg p-2" required />
                     </div>
-                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Title <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
+                      <label className="block text-sm font-medium mb-2">Title *</label>
+                      <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="w-full border rounded-lg p-2" required />
                     </div>
-                    
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Description <span className="text-red-500">*</span>
-                      </label>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        rows="4"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
+                      <label className="block text-sm font-medium mb-2">Description *</label>
+                      <textarea name="description" value={formData.description} onChange={handleInputChange} rows="4" className="w-full border rounded-lg p-2" required />
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Property Details Section */}
-              <div className={`space-y-6 ${activeSection === 'details' ? 'block' : 'hidden'}`}>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Property Details</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Price (AED/year) <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <FaDollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="number"
-                          name="price"
-                          value={formData.price}
-                          onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                          required
-                        />
-                      </div>
+                      <label className="block text-sm font-medium mb-2">Price (AED/year) *</label>
+                      <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full border rounded-lg p-2" required />
                     </div>
-                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Predicted Price
-                      </label>
-                      <input
-                        type="number"
-                        name="predictedPrice"
-                        value={formData.predictedPrice}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Price Trend
-                      </label>
-                      <select
-                        name="priceTrend"
-                        value={formData.priceTrend}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        <option value="up">📈 Upward Trend</option>
-                        <option value="down">📉 Downward Trend</option>
-                        <option value="stable">➡️ Stable</option>
+                      <label className="block text-sm font-medium mb-2">Property Type</label>
+                      <select name="type" value={formData.type} onChange={handleInputChange} className="w-full border rounded-lg p-2">
+                        {propertyTypes.map(type => <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>)}
                       </select>
                     </div>
-                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Property Type
-                      </label>
-                      <select
-                        name="type"
-                        value={formData.type}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        {propertyTypes.map(type => (
-                          <option key={type} value={type}>
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                          </option>
-                        ))}
+                      <label className="block text-sm font-medium mb-2">Bedrooms</label>
+                      <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Bathrooms</label>
+                      <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Square Feet</label>
+                      <input type="number" name="sqft" value={formData.sqft} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Emirate</label>
+                      <select name="location.emirate" value={formData.location.emirate} onChange={handleInputChange} className="w-full border rounded-lg p-2">
+                        {emirates.map(e => <option key={e} value={e}>{e}</option>)}
                       </select>
                     </div>
-                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Bedrooms
-                      </label>
-                      <div className="relative">
-                        <FaBed className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="number"
-                          name="bedrooms"
-                          value={formData.bedrooms}
-                          onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Bathrooms
-                      </label>
-                      <div className="relative">
-                        <FaBath className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="number"
-                          name="bathrooms"
-                          value={formData.bathrooms}
-                          onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Square Feet
-                      </label>
-                      <div className="relative">
-                        <FaRulerCombined className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="number"
-                          name="sqft"
-                          value={formData.sqft}
-                          onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Rating
-                      </label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        name="rating"
-                        value={formData.rating}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Number of Reviews
-                      </label>
-                      <input
-                        type="number"
-                        name="reviews"
-                        value={formData.reviews}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Location Section */}
-              <div className={`space-y-6 ${activeSection === 'location' ? 'block' : 'hidden'}`}>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Location Information</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Emirate
-                      </label>
-                      <select
-                        name="location.emirate"
-                        value={formData.location.emirate}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        {emirates.map(emirate => (
-                          <option key={emirate} value={emirate}>{emirate}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Area
-                      </label>
-                      <input
-                        type="text"
-                        name="location.area"
-                        value={formData.location.area}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Latitude
-                      </label>
-                      <input
-                        type="text"
-                        name="location.lat"
-                        value={formData.location.lat}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Longitude
-                      </label>
-                      <input
-                        type="text"
-                        name="location.lng"
-                        value={formData.location.lng}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Amenities Section */}
-              <div className={`space-y-6 ${activeSection === 'amenities' ? 'block' : 'hidden'}`}>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Amenities</h2>
-                  
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {amenitiesList.map(amenity => (
-                      <button
-                        key={amenity.name}
-                        type="button"
-                        onClick={() => handleAmenityToggle(amenity.name)}
-                        className={`p-3 rounded-lg border-2 transition-all flex items-center space-x-2 ${
-                          formData.amenities.includes(amenity.name)
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
-                        }`}
-                      >
-                        <span className="text-xl">{amenity.icon}</span>
-                        <span className="text-sm font-medium">{amenity.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t">
-                    <p className="text-sm text-gray-500">
-                      Selected: <span className="font-semibold text-blue-600">{formData.amenities.length}</span> amenities
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Media Section */}
-              <div className={`space-y-6 ${activeSection === 'media' ? 'block' : 'hidden'}`}>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Images</h2>
-                  
-                  <button
-                    type="button"
-                    onClick={handleImageAdd}
-                    className="flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors mb-4"
-                  >
-                    <FaLink />
-                    <span>Add Image URL</span>
-                  </button>
-                  
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    {formData.images.map((img, idx) => (
-                      <div key={idx} className="relative group">
-                        <img
-                          src={img}
-                          alt={`Property ${idx + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
-                          onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/150?text=Invalid+URL';
-                          }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleImageRemove(idx)}
-                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <FaTrash size={12} />
-                        </button>
-                      </div>
-                    ))}
-                    
-                    {formData.images.length === 0 && (
-                      <div className="col-span-full text-center py-12 text-gray-500 border-2 border-dashed rounded-lg">
-                        <FaImage className="text-4xl mx-auto mb-2 text-gray-300" />
-                        <p>No images added yet</p>
-                        <p className="text-sm">Click "Add Image URL" to add property images</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Features Section */}
-              <div className={`space-y-6 ${activeSection === 'features' ? 'block' : 'hidden'}`}>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold mb-6">Additional Features</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="flex items-center space-x-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.features.furnished}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            features: { ...prev.features, furnished: e.target.checked }
-                          }))}
-                          className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-gray-700">Fully Furnished</span>
-                      </label>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        View Type
-                      </label>
-                      <select
-                        name="features.view"
-                        value={formData.features.view}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        <option value="">Select view</option>
-                        <option value="sea">Sea View</option>
-                        <option value="city">City View</option>
-                        <option value="waterfront">Waterfront</option>
-                        <option value="golf">Golf View</option>
-                        <option value="park">Park View</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Floor Number
-                      </label>
-                      <input
-                        type="number"
-                        name="features.floor"
-                        value={formData.features.floor}
-                        onChange={handleInputChange}
-                        placeholder="e.g., 24"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      />
+                      <label className="block text-sm font-medium mb-2">Area</label>
+                      <input type="text" name="location.area" value={formData.location.area} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
                     </div>
                   </div>
                 </div>
@@ -696,12 +384,7 @@ const EditProperty = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex-1">
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-linear-to-r from-blue-600 to-purple-600 transition-all duration-300"
-                        style={{ 
-                          width: `${(sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100}%` 
-                        }}
-                      />
+                      <div className="h-full bg-linear-to-r from-blue-600 to-purple-600 transition-all duration-300" style={{ width: `${(sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100}%` }} />
                     </div>
                   </div>
                   <div className="ml-4 text-sm text-gray-500">
