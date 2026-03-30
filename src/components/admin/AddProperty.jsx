@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
-  FaArrowLeft, FaSave, FaTimes, FaPlus, FaTrash, 
+  FaArrowLeft, FaSave, FaPlus, FaTrash, 
   FaImage, FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt,
-  FaBuilding, FaCalendar, FaStar, FaHeart, FaChartLine,
-  FaCheck, FaSpinner, FaUpload, FaLink, FaEye,FaDollarSign 
+  FaBuilding, FaStar, FaHeart, FaChartLine,
+  FaCheck, FaSpinner, FaLink, FaEye, FaDollarSign 
 } from 'react-icons/fa';
 
 const URL = import.meta.env.VITE_API_URL;
@@ -63,6 +63,15 @@ const AddProperty = () => {
     { name: 'jacuzzi', icon: '🛁', label: 'Jacuzzi' }
   ];
 
+  const sections = [
+    { id: 'basic', label: 'Basic Info', icon: <FaBuilding /> },
+    { id: 'details', label: 'Property Details', icon: <FaBed /> },
+    { id: 'location', label: 'Location', icon: <FaMapMarkerAlt /> },
+    { id: 'amenities', label: 'Amenities', icon: <FaCheck /> },
+    { id: 'media', label: 'Media', icon: <FaImage /> },
+    { id: 'features', label: 'Features', icon: <FaStar /> }
+  ];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name.includes('.')) {
@@ -112,39 +121,98 @@ const AddProperty = () => {
     setLoading(true);
     
     try {
+      // Validate required fields
+      if (!formData.title || !formData.price || !formData.id) {
+        alert('Please fill in all required fields (ID, Title, Price)');
+        setLoading(false);
+        return;
+      }
+      
       const propertyData = {
-        ...formData,
+        id: formData.id,
+        title: formData.title,
+        description: formData.description,
         price: parseFloat(formData.price),
         predictedPrice: formData.predictedPrice ? parseFloat(formData.predictedPrice) : undefined,
+        priceTrend: formData.priceTrend,
+        type: formData.type,
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         sqft: parseInt(formData.sqft) || 0,
+        location: {
+          lat: formData.location.lat ? parseFloat(formData.location.lat) : undefined,
+          lng: formData.location.lng ? parseFloat(formData.location.lng) : undefined,
+          area: formData.location.area,
+          emirate: formData.location.emirate
+        },
+        amenities: formData.amenities,
+        images: formData.images,
         rating: formData.rating ? parseFloat(formData.rating) : 0,
-        reviews: parseInt(formData.reviews) || 0
+        reviews: parseInt(formData.reviews) || 0,
+        features: {
+          furnished: formData.features.furnished,
+          view: formData.features.view,
+          floor: formData.features.floor ? parseInt(formData.features.floor) : undefined
+        }
       };
       
-      await axios.post(`${URL}/api/property/addProperty`, propertyData, {
-        withCredentials: true
+      console.log('Sending to:', `${URL}/api/property/addProperty`);
+      console.log('Property data:', propertyData);
+      
+      const response = await axios.post(`${URL}/api/property/addProperty`, propertyData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       
-      alert('Property created successfully!');
-      navigate('/admin');
+      console.log('Response:', response.data);
+      
+      if (response.data.success) {
+        alert('✅ Property created successfully!');
+        navigate('/admin');
+      }
     } catch (error) {
       console.error('Error creating property:', error);
-      alert(error.response?.data?.message || 'Failed to create property');
+      console.error('Error response:', error.response?.data);
+      
+      // Handle duplicate property ID error (409 Conflict)
+      if (error.response?.status === 409) {
+        const errorMessage = error.response?.data?.message || 'Property with this ID already exists.';
+        const existingProperty = error.response?.data?.existingProperty;
+        
+        if (existingProperty) {
+          alert(`❌ ${errorMessage}\n\nExisting property:\nID: ${existingProperty.id}\nTitle: ${existingProperty.title}\n\nPlease use a different ID.`);
+        } else {
+          alert(`❌ ${errorMessage}`);
+        }
+        
+        // Focus on the ID field
+        const idField = document.querySelector('input[name="id"]');
+        if (idField) idField.focus();
+      }
+      // Handle authentication error
+      else if (error.response?.status === 401) {
+        alert('❌ You are not authorized. Please login as admin.');
+        navigate('/login');
+      }
+      // Handle authorization error
+      else if (error.response?.status === 403) {
+        alert('❌ You do not have admin privileges.');
+        navigate('/admin');
+      }
+      // Handle validation error
+      else if (error.response?.status === 400) {
+        alert(`❌ Invalid data: ${error.response.data?.message || 'Please check your inputs.'}`);
+      }
+      // Handle other errors
+      else {
+        alert(`❌ Failed to create property: ${error.response?.data?.message || 'Unknown error occurred'}`);
+      }
     } finally {
       setLoading(false);
     }
   };
-
-  const sections = [
-    { id: 'basic', label: 'Basic Info', icon: <FaBuilding /> },
-    { id: 'details', label: 'Property Details', icon: <FaBed /> },
-    { id: 'location', label: 'Location', icon: <FaMapMarkerAlt /> },
-    { id: 'amenities', label: 'Amenities', icon: <FaCheck /> },
-    { id: 'media', label: 'Media', icon: <FaImage /> },
-    { id: 'features', label: 'Features', icon: <FaStar /> }
-  ];
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
@@ -225,7 +293,7 @@ const AddProperty = () => {
 
           {/* Main Form */}
           <div className="flex-1">
-            <form onSubmit={handleSubmit}>
+            <form>
               {/* Basic Info Section */}
               <div className={`space-y-6 ${activeSection === 'basic' ? 'block' : 'hidden'}`}>
                 <div className="bg-white rounded-xl shadow-sm p-6">
@@ -564,9 +632,9 @@ const AddProperty = () => {
                     {formData.images.map((img, idx) => (
                       <div key={idx} className="relative group">
                         <img 
-                          src={property.images?.[0] || FALLBACK_IMAGE} 
-                          alt={property.title} 
-                          className="w-10 h-10 object-cover rounded" 
+                          src={img || FALLBACK_IMAGE}
+                          alt={`Property image ${idx + 1}`}
+                          className="w-full h-32 object-cover rounded-lg"
                           onError={(e) => {
                             e.target.src = FALLBACK_IMAGE;
                           }}
