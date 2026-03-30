@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 
 const URL = import.meta.env.VITE_API_URL;
+const FALLBACK_IMAGE = 'https://placehold.co/400x300/3498db/white?text=No+Image';
 
 const AddProperty = () => {
   const navigate = useNavigate();
@@ -562,12 +563,12 @@ const AddProperty = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {formData.images.map((img, idx) => (
                       <div key={idx} className="relative group">
-                        <img
-                          src={img}
-                          alt={`Property ${idx + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
+                        <img 
+                          src={property.images?.[0] || FALLBACK_IMAGE} 
+                          alt={property.title} 
+                          className="w-10 h-10 object-cover rounded" 
                           onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/150?text=Invalid+URL';
+                            e.target.src = FALLBACK_IMAGE;
                           }}
                         />
                         <button
