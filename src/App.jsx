@@ -14,6 +14,8 @@ import AIPredictor from './components/AIPredictor'
 import AdminDashboard from './components/admin/AdminDashboard'
 import EditProperty from './components/admin/EditProperty'
 import AddProperty from './components/admin/AddProperty'
+import ForgotPassword from './components/auth/ForgotPassword'
+import ResetPassword from './components/auth/ResetPassword'
 
 
 const App = () => {
@@ -31,6 +33,8 @@ const App = () => {
           {/* Auth routes */}
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path='/forgot-password' element={<ForgotPassword/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>}/>
 
           {/* Admin dashboard */}
           <Route path="/admin" element={<AdminDashboard/>} />

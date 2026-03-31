@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaLock, FaGoogle, FaArrowLeft, FaSpinner } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaArrowLeft, FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Login = () => {
@@ -11,7 +11,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -38,7 +38,6 @@ const Login = () => {
       if (result.success) {
         setSuccessMessage('Login successful! Redirecting...');
         
-        // Small delay then navigate
         setTimeout(() => {
           navigate('/properties');
         }, 1000);
@@ -52,10 +51,6 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    setError('Google login coming soon!');
   };
 
   const handleDemoLogin = () => {
@@ -73,7 +68,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-gray-100 flex items-center justify-center p-2">
       <div className="max-w-md w-full">
         {/* Back to Home */}
         <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors">
@@ -106,34 +101,23 @@ const Login = () => {
               </div>
             )}
 
-            {/*User- Demo Login Button */}
+            {/* User Demo Login Button */}
             <button
               type="button"
               onClick={handleDemoLogin}
               className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
             >
-              📋Use User Demo Credentials
+              📋 Use User Demo Credentials
             </button>
 
-            {/*Admin- Demo Login Button */}
+            {/* Admin Demo Login Button */}
             <button
               type="button"
               onClick={handleDemoLogin_admin}
               className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
             >
-              📋Use Admin Demo Credentials
+              📋 Use Admin Demo Credentials
             </button>
-
-
-            {/* Google Login Button */}
-            {/* <button
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <FaGoogle className="text-red-500" />
-              <span className="font-medium">Sign in with Google</span>
-            </button> */}
 
             <div className="flex items-center my-6">
               <div className="flex-1 h-px bg-gray-300"></div>
@@ -177,15 +161,22 @@ const Login = () => {
                 <div className="relative">
                   <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Enter your password"
                     disabled={loading}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
+                  </button>
                 </div>
               </div>
 
@@ -214,20 +205,16 @@ const Login = () => {
               </p>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            {/* <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-xs text-gray-500 text-center">
                 Demo credentials for testing:
                 <br />
-                <span className="font-mono">alan@gmail.com | alan@1998</span>
+                <span className="font-mono">alan@gmail.com | alan@1998 (User)</span>
                 <br />
-                <button 
-                  onClick={handleDemoLogin}
-                  className="text-blue-600 hover:text-blue-800 text-xs mt-1"
-                >
-                  Click to auto-fill
-                </button>
+                <span className="font-mono">sara@gmail.com | sara@1234 (Admin)</span>
+                <br />
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
-// components/auth/Signup.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaGoogle, FaArrowLeft, FaSpinner } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaGoogle, FaArrowLeft, FaSpinner,FaEye,FaEyeSlash } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Signup = () => {
@@ -16,7 +15,8 @@ const Signup = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -149,14 +149,14 @@ const Signup = () => {
             </button>
 
             {/* Google Signup Button */}
-            <button
+            {/* <button
               onClick={handleGoogleSignup}
               disabled={loading}
               className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaGoogle className="text-red-500" />
               <span className="font-medium">Sign up with Google</span>
-            </button>
+            </button> */}
 
             <div className="flex items-center my-6">
               <div className="flex-1 h-px bg-gray-300"></div>
@@ -233,15 +233,22 @@ const Signup = () => {
                 <div className="relative">
                   <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="••••••••"
                     disabled={loading}
                   />
+                  <button
+                   type="button"
+                   onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                   >
+                    {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18}/>}
+                  </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
               </div>
@@ -254,15 +261,22 @@ const Signup = () => {
                 <div className="relative">
                   <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="••••••••"
                     disabled={loading}
                   />
+                  <button
+                   type="button"
+                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                   {showConfirmPassword ? <FaEye size={18}/> : <FaEyeSlash size={18}/>}
+                  </button>
                 </div>
               </div>
 
