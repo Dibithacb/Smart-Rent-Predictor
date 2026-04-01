@@ -56,7 +56,7 @@ const EditProperty = () => {
     { name: 'security', icon: '👮', label: 'Security' },
     { name: 'balcony', icon: '🌇', label: 'Balcony' },
     { name: 'garden', icon: '🌳', label: 'Garden' },
-    { name: 'beach-access', icon: '🏖️', label: 'Beach Access' },
+    { name: 'beach', icon: '🏖️', label: 'Beach Access' },
     { name: 'maid-room', icon: '👩‍🍳', label: "Maid's Room" },
     { name: 'study-room', icon: '📚', label: 'Study Room' },
     { name: 'concierge', icon: '🛎️', label: 'Concierge' }
@@ -128,8 +128,12 @@ const EditProperty = () => {
             floor: property.features?.floor || ''
           }
         });
-        // Store original images for tracking
         setOriginalImages([...property.images]);
+        console.log('✅ Features loaded:', {
+          furnished: property.features?.furnished,
+          view: property.features?.view,
+          floor: property.features?.floor
+        });
       }
     } catch (error) {
       console.error('❌ Error fetching property:', error);
@@ -175,10 +179,8 @@ const EditProperty = () => {
     }
   };
 
-  // ✅ FIXED: Remove image from array immediately and track for deletion
   const handleImageRemove = (indexToRemove) => {
-    // Show confirmation dialog
-    if (window.confirm('Are you sure you want to remove this image? This will be saved when you update the property.')) {
+    if (window.confirm('Are you sure you want to remove this image?')) {
       setFormData(prev => ({
         ...prev,
         images: prev.images.filter((_, index) => index !== indexToRemove)
@@ -191,7 +193,6 @@ const EditProperty = () => {
     setLoading(true);
     
     try {
-      // Find which images were removed
       const removedImages = originalImages.filter(img => !formData.images.includes(img));
       
       const propertyData = {
@@ -220,21 +221,16 @@ const EditProperty = () => {
           view: formData.features.view,
           floor: formData.features.floor ? parseInt(formData.features.floor) : undefined
         },
-        removedImages: removedImages // Send removed images to backend
+        removedImages: removedImages
       };
       
-      console.log('📤 Updating property at:', `${URL}/api/property/updateProperty/${id}`);
-      console.log('📦 Update data:', propertyData);
-      console.log('🗑️ Removed images:', removedImages);
+      console.log('📤 Updating property...');
+      console.log('📦 Features data:', propertyData.features);
       
       const response = await axios.put(`${URL}/api/property/updateProperty/${id}`, propertyData, {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       });
-      
-      console.log('✅ Update response:', response.data);
       
       if (response.data.success) {
         alert('✅ Property updated successfully!');
@@ -244,20 +240,7 @@ const EditProperty = () => {
       }
     } catch (error) {
       console.error('❌ Error updating property:', error);
-      console.error('❌ Error response:', error.response?.data);
-      
-      if (error.response?.status === 401) {
-        alert('❌ You are not authorized. Please login as admin.');
-        navigate('/login');
-      } else if (error.response?.status === 403) {
-        alert('❌ You do not have admin privileges.');
-      } else if (error.response?.status === 404) {
-        alert('❌ Property not found or update endpoint is incorrect.');
-      } else if (error.response?.status === 400) {
-        alert(`❌ Invalid data: ${error.response.data?.message || 'Please check your inputs.'}`);
-      } else {
-        alert(`❌ Failed to update property: ${error.response?.data?.message || 'Unknown error occurred'}`);
-      }
+      alert(error.response?.data?.message || 'Failed to update property');
     } finally {
       setLoading(false);
     }
@@ -370,6 +353,18 @@ const EditProperty = () => {
                       <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full border rounded-lg p-2" required />
                     </div>
                     <div>
+                      <label className="block text-sm font-medium mb-2">Predicted Price</label>
+                      <input type="number" name="predictedPrice" value={formData.predictedPrice} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Price Trend</label>
+                      <select name="priceTrend" value={formData.priceTrend} onChange={handleInputChange} className="w-full border rounded-lg p-2">
+                        <option value="up">📈 Upward Trend</option>
+                        <option value="down">📉 Downward Trend</option>
+                        <option value="stable">➡️ Stable</option>
+                      </select>
+                    </div>
+                    <div>
                       <label className="block text-sm font-medium mb-2">Property Type</label>
                       <select name="type" value={formData.type} onChange={handleInputChange} className="w-full border rounded-lg p-2">
                         {propertyTypes.map(type => <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>)}
@@ -387,11 +382,94 @@ const EditProperty = () => {
                       <label className="block text-sm font-medium mb-2">Square Feet</label>
                       <input type="number" name="sqft" value={formData.sqft} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Rating</label>
+                      <input type="number" step="0.1" name="rating" value={formData.rating} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Number of Reviews</label>
+                      <input type="number" name="reviews" value={formData.reviews} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Media Section with Improved Image Removal */}
+              {/* Details Section */}
+              <div className={`space-y-6 ${activeSection === 'details' ? 'block' : 'hidden'}`}>
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold mb-6">Location Details</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Emirate</label>
+                      <select name="location.emirate" value={formData.location.emirate} onChange={handleInputChange} className="w-full border rounded-lg p-2">
+                        {emirates.map(e => <option key={e} value={e}>{e}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Area</label>
+                      <input type="text" name="location.area" value={formData.location.area} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Latitude</label>
+                      <input type="text" name="location.lat" value={formData.location.lat} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Longitude</label>
+                      <input type="text" name="location.lng" value={formData.location.lng} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Location Section */}
+              <div className={`space-y-6 ${activeSection === 'location' ? 'block' : 'hidden'}`}>
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold mb-6">Property Details</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Emirate</label>
+                      <select name="location.emirate" value={formData.location.emirate} onChange={handleInputChange} className="w-full border rounded-lg p-2">
+                        {emirates.map(e => <option key={e} value={e}>{e}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Area</label>
+                      <input type="text" name="location.area" value={formData.location.area} onChange={handleInputChange} className="w-full border rounded-lg p-2" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Amenities Section */}
+              <div className={`space-y-6 ${activeSection === 'amenities' ? 'block' : 'hidden'}`}>
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold mb-6">Amenities</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {amenitiesList.map(amenity => (
+                      <button
+                        key={amenity.name}
+                        type="button"
+                        onClick={() => handleAmenityToggle(amenity.name)}
+                        className={`p-3 rounded-lg border-2 transition-all flex items-center space-x-2 ${
+                          formData.amenities.includes(amenity.name)
+                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                            : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        <span className="text-xl">{amenity.icon}</span>
+                        <span className="text-sm font-medium">{amenity.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t">
+                    <p className="text-sm text-gray-500">
+                      Selected: <span className="font-semibold text-blue-600">{formData.amenities.length}</span> amenities
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Media Section */}
               <div className={`space-y-6 ${activeSection === 'media' ? 'block' : 'hidden'}`}>
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <h2 className="text-xl font-bold mb-6">Images</h2>
@@ -415,8 +493,7 @@ const EditProperty = () => {
                         <button
                           type="button"
                           onClick={() => handleImageRemove(idx)}
-                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:opacity-100"
-                          title="Remove image"
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <FaTrash size={12} />
                         </button>
@@ -426,19 +503,13 @@ const EditProperty = () => {
                       <div className="col-span-full text-center py-12 text-gray-500 border-2 border-dashed rounded-lg">
                         <FaImage className="text-4xl mx-auto mb-2 text-gray-300" />
                         <p>No images added yet</p>
-                        <p className="text-sm">Click "Add Image URL" to add property images</p>
                       </div>
                     )}
                   </div>
-                  {formData.images.length > 0 && (
-                    <p className="text-xs text-gray-500 mt-4">
-                      💡 Click the trash icon to remove images. Changes will be saved when you click "Update Property".
-                    </p>
-                  )}
                 </div>
               </div>
 
-              {/* Features Section */}
+              {/* ✅ FEATURES SECTION - ADDED */}
               <div className={`space-y-6 ${activeSection === 'features' ? 'block' : 'hidden'}`}>
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <h2 className="text-xl font-bold mb-6">Additional Features</h2>
@@ -489,6 +560,11 @@ const EditProperty = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
+                  </div>
+                  
+                  {/* Debug info - shows current values */}
+                  <div className="mt-4 pt-4 border-t text-xs text-gray-400">
+                    <p>Current values: Furnished: {formData.features.furnished ? 'Yes' : 'No'} | View: {formData.features.view || 'None'} | Floor: {formData.features.floor || 'Not set'}</p>
                   </div>
                 </div>
               </div>
