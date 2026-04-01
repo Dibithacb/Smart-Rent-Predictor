@@ -56,7 +56,7 @@ const EditProperty = () => {
     { name: 'security', icon: '👮', label: 'Security' },
     { name: 'balcony', icon: '🌇', label: 'Balcony' },
     { name: 'garden', icon: '🌳', label: 'Garden' },
-    { name: 'beach', icon: '🏖️', label: 'Beach Access' },
+    { name: 'beach-access', icon: '🏖️', label: 'Beach Access' },
     { name: 'maid-room', icon: '👩‍🍳', label: "Maid's Room" },
     { name: 'study-room', icon: '📚', label: 'Study Room' },
     { name: 'concierge', icon: '🛎️', label: 'Concierge' }
@@ -193,56 +193,87 @@ const EditProperty = () => {
     setLoading(true);
     
     try {
-      const removedImages = originalImages.filter(img => !formData.images.includes(img));
-      
-      const propertyData = {
-        id: formData.id,
-        title: formData.title,
-        description: formData.description,
-        price: parseFloat(formData.price),
-        predictedPrice: formData.predictedPrice ? parseFloat(formData.predictedPrice) : undefined,
-        priceTrend: formData.priceTrend,
-        type: formData.type,
-        bedrooms: parseInt(formData.bedrooms) || 0,
-        bathrooms: parseInt(formData.bathrooms) || 0,
-        sqft: parseInt(formData.sqft) || 0,
-        location: {
-          lat: formData.location.lat ? parseFloat(formData.location.lat) : undefined,
-          lng: formData.location.lng ? parseFloat(formData.location.lng) : undefined,
-          area: formData.location.area,
-          emirate: formData.location.emirate
-        },
-        amenities: formData.amenities,
-        images: formData.images,
-        rating: formData.rating ? parseFloat(formData.rating) : 0,
-        reviews: parseInt(formData.reviews) || 0,
-        features: {
-          furnished: formData.features.furnished,
-          view: formData.features.view,
-          floor: formData.features.floor ? parseInt(formData.features.floor) : undefined
-        },
-        removedImages: removedImages
-      };
-      
-      console.log('📤 Updating property...');
-      console.log('📦 Features data:', propertyData.features);
-      
-      const response = await axios.put(`${URL}/api/property/updateProperty/${id}`, propertyData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-      if (response.data.success) {
-        alert('✅ Property updated successfully!');
-        navigate('/admin');
-      } else {
-        alert(response.data.message || 'Failed to update property');
-      }
+        // Validate required fields
+        if (!formData.title) {
+            alert('Property title is required');
+            setLoading(false);
+            return;
+        }
+        
+        if (!formData.price) {
+            alert('Property price is required');
+            setLoading(false);
+            return;
+        }
+        
+        if (!formData.location.lat || !formData.location.lng) {
+            alert('Location coordinates are required');
+            setLoading(false);
+            return;
+        }
+        
+        // Prepare data for API - match the exact schema
+        const propertyData = {
+            title: formData.title,
+            description: formData.description,
+            price: parseFloat(formData.price),
+            predictedPrice: formData.predictedPrice ? parseFloat(formData.predictedPrice) : undefined,
+            priceTrend: formData.priceTrend,
+            type: formData.type, // Schema uses 'type', not 'propertyType'
+            bedrooms: parseInt(formData.bedrooms) || 0,
+            bathrooms: parseInt(formData.bathrooms) || 0,
+            sqft: parseInt(formData.sqft) || 0,
+            rating: formData.rating ? parseFloat(formData.rating) : 0,
+            reviews: formData.reviews ? parseInt(formData.reviews) : 0,
+            location: {
+                lat: parseFloat(formData.location.lat),
+                lng: parseFloat(formData.location.lng),
+                area: formData.location.area,
+                emirate: formData.location.emirate
+            },
+            amenities: formData.amenities || [],
+            images: formData.images || [],
+            features: {
+                furnished: formData.features.furnished || false,
+                view: formData.features.view || '',
+                floor: formData.features.floor ? parseInt(formData.features.floor) : undefined
+            }
+        };
+        
+        console.log('📤 Sending update data:', JSON.stringify(propertyData, null, 2));
+        
+        const response = await axios.put(`${URL}/api/property/updateProperty/${id}`, propertyData, {
+            withCredentials: true,
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        console.log('✅ Update response:', response.data);
+        
+        if (response.data.success) {
+            alert('✅ Property updated successfully!');
+            navigate('/admin');
+        } else {
+            alert(response.data.message || 'Failed to update property');
+        }
     } catch (error) {
-      console.error('❌ Error updating property:', error);
-      alert(error.response?.data?.message || 'Failed to update property');
+        console.error('❌ Error updating property:', error);
+        
+        if (error.response) {
+            console.error('Error response data:', error.response.data);
+            const errorMessage = error.response.data.message || 
+                                error.response.data.error || 
+                                'Failed to update property';
+            alert(`Error: ${errorMessage}`);
+        } else if (error.request) {
+            alert('No response from server. Please check your connection.');
+        } else {
+            alert(`Error: ${error.message}`);
+        }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
