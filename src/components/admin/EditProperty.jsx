@@ -56,7 +56,7 @@ const EditProperty = () => {
     { name: 'security', icon: '👮', label: 'Security' },
     { name: 'balcony', icon: '🌇', label: 'Balcony' },
     { name: 'garden', icon: '🌳', label: 'Garden' },
-    { name: 'beach', icon: '🏖️', label: 'Beach Access' },
+    { name: 'beach-access', icon: '🏖️', label: 'Beach Access' },
     { name: 'maid-room', icon: '👩‍🍳', label: "Maid's Room" },
     { name: 'study-room', icon: '📚', label: 'Study Room' },
     { name: 'concierge', icon: '🛎️', label: 'Concierge' }
