@@ -136,17 +136,6 @@ const Property = ({ property }) => {
         <div className="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
           AED {property.price.toLocaleString()}/year
         </div>
-        {/* {property.predictedPrice && (
-          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
-            <span className="flex items-center gap-1">
-              <FaChartLine className={property.priceTrend === 'up' ? 'text-green-500' : property.priceTrend === 'down' ? 'text-red-500' : 'text-gray-500'}/>
-              <span className={property.priceTrend === 'up' ? 'text-green-600' : property.priceTrend === 'down' ? 'text-red-600' : 'text-gray-600'}>
-                {getPriceTrendIcon()} Predicted: AED {property.predictedPrice.toLocaleString()} 
-              </span>
-            </span>
-
-          </div>
-        )} */}
       </div>
 
       {/* Property Details */}
@@ -211,9 +200,11 @@ const Property = ({ property }) => {
           >
             View Details
           </NavLink>
-          <button className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+          {/* <NavLink 
+          to={`/compare/${property.id}`}
+          className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors">
             Compare
-          </button>
+          </NavLink> */}
         </div>
       </div>
     </div>

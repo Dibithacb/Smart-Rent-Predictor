@@ -82,7 +82,7 @@ const PropertyDetails = () => {
                 <MdVerified className="ml-2 text-blue-500" />
               </div>
             </div>
-            <div className="flex space-x-3">
+            {/* <div className="flex space-x-3">
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
                 className={`p-3 rounded-full ${isFavorite ? 'bg-red-50 text-red-500' : 'bg-gray-100 text-gray-600'}`}
@@ -92,7 +92,7 @@ const PropertyDetails = () => {
               <button className="p-3 bg-gray-100 rounded-full text-gray-600">
                 <FaShareAlt />
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Price Section */}
@@ -109,7 +109,7 @@ const PropertyDetails = () => {
                   </span>
                 </div>
               </div>
-              <div className="mt-4 md:mt-0 flex space-x-4">
+              {/* <div className="mt-4 md:mt-0 flex space-x-4">
                 <button className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                   Contact Agent
                 </button>
@@ -119,13 +119,13 @@ const PropertyDetails = () => {
                 >
                   Add to Compare
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content lg:grid-cols-3 gap-8*/}
+        <div className="grid grid-cols-1">
           {/* Left Column - Images & Details */}
           <div className="lg:col-span-2">
             {/* Image Carousel */}
@@ -330,9 +330,9 @@ const PropertyDetails = () => {
           </div>
 
           {/* Right Column - Sidebar */}
-          <div className="space-y-6">
+          {/* <div className="space-y-6"> */}
             {/* Contact Agent */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            {/* <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-bold mb-4">Contact Agent</h3>
               <div className="flex items-center mb-6">
                 <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-2xl">
@@ -357,71 +357,8 @@ const PropertyDetails = () => {
                   Send Message
                 </button>
               </div>
-            </div>
-
-            {/* Rent Calculator */}
-            {/* <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4">AI Rent Calculator</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bedrooms</label>
-                  <select className="w-full p-3 border rounded-lg">
-                    <option>{property.bedrooms} Bedroom{property.bedrooms !== 1 ? 's' : ''}</option>
-                    <option>1 Bedroom</option>
-                    <option>2 Bedrooms</option>
-                    <option>3 Bedrooms</option>
-                    <option>4+ Bedrooms</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Square Feet</label>
-                  <input 
-                    type="range" 
-                    min="500" 
-                    max="5000" 
-                    step="100" 
-                    defaultValue={property.sqft}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>500 sqft</span>
-                    <span>{property.sqft} sqft</span>
-                    <span>5000 sqft</span>
-                  </div>
-                </div>
-                <button className="w-full py-3 bg-linear-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
-                  Calculate Rent Prediction
-                </button>
-              </div>
             </div> */}
-
-            {/* Similar Properties */}
-            {/* <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4">Similar Properties</h3>
-              <div className="space-y-4">
-                {propertyData
-                  .filter(p => p.id !== property.id && p.location.area === property.location.area)
-                  .slice(0, 3)
-                  .map(similar => (
-                    <div key={similar.id} className="flex border rounded-lg p-3 hover:bg-gray-50 cursor-pointer">
-                      <img 
-                        src={similar.images[0]} 
-                        alt={similar.title}
-                        className="w-20 h-20 object-cover rounded"
-                      />
-                      <div className="ml-4">
-                        <div className="font-semibold line-clamp-1">{similar.title}</div>
-                        <div className="text-primary font-bold">AED {similar.price.toLocaleString()}</div>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <span className="mr-3">🛏️ {similar.bedrooms}</span>
-                          <span>🚿 {similar.bathrooms}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div> */}
-          </div>
+          {/* </div> */}
         </div>
       </div>
     </div>

@@ -231,31 +231,6 @@ const Favorites = () => {
           </div>
         )}
 
-        {/* User Actions */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-linear-to-r from-blue-50 to-blue-100 p-6 rounded-xl">
-            <h3 className="font-bold text-lg mb-3">Need help?</h3>
-            <p className="text-gray-700 mb-4">
-              Contact our support team for assistance with your saved properties.
-            </p>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-              Contact Support
-            </button>
-          </div>
-          
-          <div className="bg-linear-to-r from-green-50 to-green-100 p-6 rounded-xl">
-            <h3 className="font-bold text-lg mb-3">Get AI Recommendations</h3>
-            <p className="text-gray-700 mb-4">
-              Based on your favorites, our AI can suggest similar properties you might like.
-            </p>
-            <Link 
-              to="/predictor"
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Get Recommendations
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );
