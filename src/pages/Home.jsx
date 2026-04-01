@@ -12,7 +12,7 @@ const Home = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-10">
           <h1 className="text-5xl font-bold mb-4">Smart Rent Predictor</h1>
           <p className="text-xl mb-8 opacity-90">
             AI-powered rental platform for UAE. Find your perfect home with
@@ -36,7 +36,7 @@ const Home = () => {
       </div>
 
       {/* Features */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-12">Core Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="bg-white p-6 rounded-xl shadow-lg">
@@ -83,7 +83,7 @@ const Home = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-blue-50 py-10">
+      <div className="bg-blue-50 py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Ready to Find Your Perfect Home?
