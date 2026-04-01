@@ -275,7 +275,7 @@ const EditProperty = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-4">
@@ -285,7 +285,7 @@ const EditProperty = () => {
                 <FaArrowLeft className="text-gray-600" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Edit Property
                 </h1>
                 <p className="text-sm text-gray-500 mt-1">
@@ -300,7 +300,7 @@ const EditProperty = () => {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 flex items-center space-x-2 disabled:opacity-50"
+                className="px-6 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 flex items-center space-x-2 disabled:opacity-50"
               >
                 {loading ? (
                   <>
@@ -332,7 +332,7 @@ const EditProperty = () => {
                     onClick={() => setActiveSection(section.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                       activeSection === section.id
-                        ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 border-l-4 border-blue-600'
+                        ? 'bg-linear-to-r from-blue-50 to-purple-50 text-blue-600 border-l-4 border-blue-600'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
@@ -499,7 +499,7 @@ const EditProperty = () => {
                   <div className="flex-1">
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"
+                        className="h-full bg-linear-to-r from-blue-600 to-purple-600 transition-all duration-300"
                         style={{ width: `${(sections.findIndex(s => s.id === activeSection) + 1) / sections.length * 100}%` }}
                       />
                     </div>
